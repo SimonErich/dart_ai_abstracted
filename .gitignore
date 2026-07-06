@@ -1,0 +1,22 @@
+# Dart
+.dart_tool/
+.packages
+build/
+pubspec.lock
+doc/api/
+
+# Coverage
+coverage/
+*.lcov
+
+# Docs site (Astro)
+docs-site/node_modules/
+docs-site/dist/
+docs-site/.astro/
+docs-site/src/content/docs/
+
+# Editor and OS
+*.iml
+.idea/
+.vscode/
+.DS_Store

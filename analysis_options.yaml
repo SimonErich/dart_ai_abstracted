@@ -1,0 +1,22 @@
+# Analysis for ai_abstracted. Built on the official Dart recommended lints, with
+# a few extra strictness knobs and mandatory documentation on the public API.
+include: package:lints/recommended.yaml
+
+formatter:
+  page_width: 100
+
+analyzer:
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+  errors:
+    # Documentation on the public surface is a requirement, not a suggestion.
+    public_member_api_docs: error
+
+linter:
+  rules:
+    public_member_api_docs: true
+    directives_ordering: true
+    require_trailing_commas: true
+    unawaited_futures: true
