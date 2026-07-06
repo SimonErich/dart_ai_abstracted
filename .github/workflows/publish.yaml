@@ -1,0 +1,15 @@
+name: Publish
+
+# Publishes to pub.dev when a version tag is pushed. Uses pub.dev automated
+# publishing (OIDC), so no token is stored in the repository. Enable automated
+# publishing for the package on pub.dev first, with the tag pattern v{{version}}.
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  publish:
+    permissions:
+      id-token: write
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
