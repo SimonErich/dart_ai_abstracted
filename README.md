@@ -102,7 +102,7 @@ Future<void> main() async {
 | Music         | Suno (via sunoapi.org)             |
 
 Each provider has its own page with setup, examples, and tips. See the
-[provider directory](doc/providers/index.md).
+[provider directory](https://simonerich.github.io/dart_ai_abstracted/providers/).
 
 ## What you get
 
@@ -119,17 +119,17 @@ Each provider has its own page with setup, examples, and tips. See the
 
 ## Documentation
 
-The full documentation lives in [`doc/`](doc/README.md) and is published at
+The full documentation is at
 <https://simonerich.github.io/dart_ai_abstracted/>.
 
 Good places to start:
 
-- [Installation](doc/getting-started/installation.md)
-- [Your first request](doc/getting-started/your-first-request.md)
-- [Core concepts](doc/getting-started/core-concepts.md)
-- [Provider directory](doc/providers/index.md)
-- [Testing with fakes](doc/guides/testing.md)
-- [Writing your own provider](doc/guides/custom-provider.md)
+- [Installation](https://simonerich.github.io/dart_ai_abstracted/getting-started/installation/)
+- [Your first request](https://simonerich.github.io/dart_ai_abstracted/getting-started/your-first-request/)
+- [Core concepts](https://simonerich.github.io/dart_ai_abstracted/getting-started/core-concepts/)
+- [Provider directory](https://simonerich.github.io/dart_ai_abstracted/providers/)
+- [Testing with fakes](https://simonerich.github.io/dart_ai_abstracted/guides/testing/)
+- [Writing your own provider](https://simonerich.github.io/dart_ai_abstracted/guides/custom-provider/)
 
 ## Example
 
