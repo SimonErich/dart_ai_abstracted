@@ -58,9 +58,11 @@ jobs:
         with:
           sdk: stable
       # Prove the runtime dependency lower bounds (http, meta) actually resolve
-      # and pass. Only the runtime deps are pinned down: downgrading the dev
-      # tooling (the test runner) to its floor breaks against a modern SDK and
+      # and pass. `pub get` first locks the dev tooling at its current version,
+      # then a named downgrade moves only http and meta to their floors:
+      # downgrading the test runner to its floor breaks against a modern SDK and
       # is not something consumers depend on.
+      - run: dart pub get
       - run: dart pub downgrade http meta
       - run: dart test
 
