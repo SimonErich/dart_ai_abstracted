@@ -1,0 +1,15 @@
+# Files kept out of the published archive. A .pubignore fully replaces
+# .gitignore for the directories it covers, so it repeats the build artifacts
+# and adds the docs site tooling, which belongs on GitHub but not on pub.dev.
+.dart_tool/
+build/
+pubspec.lock
+doc/api/
+coverage/
+*.lcov
+docs-site/
+.githooks/
+*.iml
+.idea/
+.vscode/
+.DS_Store
