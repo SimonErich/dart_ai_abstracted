@@ -1,13 +1,30 @@
 # Changelog
 
-The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and
-the versions follow [Semantic Versioning](https://semver.org/).
+## 0.2.0
 
-## [0.1.0] - 2026-07-06
+A standards-alignment release. One behavior change (Errors no longer retry) and
+a few type-modifier changes; the rest is documentation, tests, and packaging.
+
+- **BREAKING** The value types (`GenerationResult`, `GenerationMetadata`,
+  `GenerationProgress`, `ProviderCredentials`) and the concrete `AiException`
+  subclasses are now `final`. Extend `AiException` itself for a custom provider
+  exception; use composition rather than subclassing a value type.
+- **BREAKING** The transport wraps only `Exception`s as transient. An `Error`
+  (a programming bug) now propagates with its stack trace instead of being
+  retried as a transport failure.
+- Added `ProviderCredentials.keyless()` for keyless providers such as Ollama,
+  so a missing key stays a loud error on the default constructor.
+- `RetryPolicy` is now an `interface class`: implement it to supply a custom
+  backoff curve.
+- The in-memory fakes are open for extension, so a test can override one method.
+- The capability methods now document the exceptions they throw, and the
+  library documentation links the key types.
+- `@useResult` marks the pure builders (`RetryPolicy.delayFor`,
+  `retryableStatus`, `credentialsFromEnv`, `allCredentialsFromEnv`).
+
+## 0.1.0
 
 First public release.
-
-### Added
 
 - Provider-agnostic contracts for text, image, video, speech, sound-effect, and
   music generation, each a single async method that takes a typed request and
