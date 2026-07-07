@@ -17,13 +17,20 @@ const docRoot = path.join(repoRoot, 'doc');
 const outRoot = path.join(here, '..', 'src', 'content', 'docs');
 const blobBase = 'https://github.com/SimonErich/dart_ai_abstracted/blob/main';
 
-/** Every Markdown file under doc/, as paths relative to doc/. */
+// Top-level doc/ subdirectories that are not part of the Starlight site.
+// doc/categories holds dartdoc category descriptions (dartdoc_options.yaml):
+// plain Markdown without frontmatter, rendered into the API reference, not the
+// site. Including them here would trip the frontmatter guard in main().
+const skipDirs = new Set(['categories']);
+
+/** Every site Markdown file under doc/, as paths relative to doc/. */
 async function collect(dir, base = '') {
   const out = [];
   for (const entry of await readdir(dir)) {
     const abs = path.join(dir, entry);
     const rel = base ? `${base}/${entry}` : entry;
     if ((await stat(abs)).isDirectory()) {
+      if (skipDirs.has(rel)) continue;
       out.push(...(await collect(abs, rel)));
     } else if (entry.endsWith('.md')) {
       out.push(rel);
