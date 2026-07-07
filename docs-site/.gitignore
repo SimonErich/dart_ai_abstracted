@@ -1,5 +1,15 @@
-node_modules/
-dist/
-.astro/
-# Generated from ../doc by scripts/sync-docs.mjs
-src/content/docs/
+# Docusaurus / Node build artifacts — the site is rebuilt in CI.
+/node_modules/
+/build/
+/.docusaurus/
+/.cache-loader/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# OS / editor
+.DS_Store

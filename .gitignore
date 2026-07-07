@@ -9,11 +9,8 @@ doc/api/
 coverage/
 *.lcov
 
-# Docs site (Astro)
-docs-site/node_modules/
-docs-site/dist/
-docs-site/.astro/
-docs-site/src/content/docs/
+# Docs site build artifacts are ignored by docs-site/.gitignore
+# (node_modules/, build/, .docusaurus/).
 
 # Editor and OS
 *.iml

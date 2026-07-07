@@ -133,7 +133,7 @@ The retry runner the built-in clients use is not exported, so this loop is the a
 
 ## Consider sending a pull request
 
-If other people would want this provider, the better home for it is the package itself. Inside the package your client can call the shared transport helpers, join the provider registry, read its key through `credentialsFromEnv`, and ship with a fake, so the whole community gets it and maintains it with you. If that sounds right, open a pull request. See [CONTRIBUTING](../../CONTRIBUTING.md) for the layout and the test expectations.
+If other people would want this provider, the better home for it is the package itself. Inside the package your client can call the shared transport helpers, join the provider registry, read its key through `credentialsFromEnv`, and ship with a fake, so the whole community gets it and maintains it with you. If that sounds right, open a pull request. See [CONTRIBUTING](https://github.com/SimonErich/dart_ai_abstracted/blob/main/CONTRIBUTING.md) for the layout and the test expectations.
 
 ## See also
 

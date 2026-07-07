@@ -1,17 +1,36 @@
 {
   "name": "ai_abstracted-docs",
-  "type": "module",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "private": true,
+  "description": "Documentation site for ai_abstracted, built from ../doc with Docusaurus.",
   "scripts": {
-    "sync": "node scripts/sync-docs.mjs",
-    "dev": "node scripts/sync-docs.mjs && astro dev",
-    "build": "astro build",
-    "preview": "astro preview"
+    "start": "docusaurus start",
+    "build": "docusaurus build",
+    "serve": "docusaurus serve",
+    "clear": "docusaurus clear",
+    "write-heading-ids": "docusaurus write-heading-ids"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 3 chrome version",
+      "last 3 firefox version",
+      "last 5 safari version"
+    ]
+  },
+  "engines": {
+    "node": ">=20.0"
   },
   "dependencies": {
-    "@astrojs/starlight": "^0.34.0",
-    "astro": "^5.6.0",
-    "sharp": "^0.34.0"
+    "@docusaurus/core": "^3.10.1",
+    "@docusaurus/preset-classic": "^3.10.1",
+    "clsx": "^2.1.1",
+    "prism-react-renderer": "^2.4.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   }
 }
