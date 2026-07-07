@@ -3,6 +3,7 @@
 [![pub package](https://img.shields.io/pub/v/ai_abstracted.svg)](https://pub.dev/packages/ai_abstracted)
 [![CI](https://github.com/SimonErich/dart_ai_abstracted/actions/workflows/ci.yaml/badge.svg)](https://github.com/SimonErich/dart_ai_abstracted/actions/workflows/ci.yaml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![style: lints](https://img.shields.io/badge/style-lints-40c4ff.svg)](https://pub.dev/packages/lints)
 
 One set of contracts for generative AI, across many providers and every medium.
 
@@ -53,7 +54,8 @@ import 'dart:io';
 import 'package:ai_abstracted/ai_abstracted.dart';
 
 Future<void> main() async {
-  final credentials = credentialsFromEnv(ProviderId.claude, Platform.environment);
+  final credentials =
+      credentialsFromEnv(ProviderId.claude, Platform.environment);
   if (credentials == null) {
     stderr.writeln('Set ANTHROPIC_API_KEY first.');
     return;
@@ -83,7 +85,11 @@ Future<void> main() async {
     credentials: const ProviderCredentials(apiKey: 'sk-...'),
   );
   final result = await images.generateImage(
-    const ImageRequest(prompt: 'a red bicycle on a white wall', width: 1024, height: 1024),
+    const ImageRequest(
+      prompt: 'a red bicycle on a white wall',
+      width: 1024,
+      height: 1024,
+    ),
   );
 
   await File('bicycle.png').writeAsBytes(result.bytes);
