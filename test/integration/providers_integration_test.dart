@@ -1,3 +1,4 @@
+@TestOn('vm')
 @Tags(['generative'])
 library;
 
@@ -6,18 +7,20 @@ import 'dart:io';
 import 'package:ai_abstracted/ai_abstracted.dart';
 import 'package:test/test.dart';
 
-/// Live provider checks. They are tagged `generative` and excluded from CI; run
-/// them with the relevant API keys to verify the real wire shapes:
+/// Live provider checks. They are tagged `generative`, so a plain `dart test`
+/// skips them; run them with the relevant API keys to verify the real wire
+/// shapes:
 ///
 /// ```sh
 /// dart test --tags generative
 /// ```
 ///
 /// Each test skips when its key is absent, so the file is safe to keep green.
+/// The `generative` tag carries a five-minute timeout (see dart_test.yaml).
 void main() {
   final env = Platform.environment;
-  // Opt-in twice: the explicit run flag AND the provider key, so a present key in
-  // the environment never triggers an accidental paid API call.
+  // Opt-in twice: the explicit run flag AND the provider key, so a present key
+  // in the environment never triggers an accidental paid API call.
   String? skipIf(String key) {
     if (env['RUN_INTEGRATION'] == null) {
       return 'set RUN_INTEGRATION=1 (and $key) to run';
@@ -27,7 +30,6 @@ void main() {
 
   ProviderCredentials creds(String key) =>
       ProviderCredentials(apiKey: env[key]!);
-  const slow = Timeout(Duration(minutes: 5));
 
   test(
     'Flux image (BFL)',
@@ -44,7 +46,6 @@ void main() {
       expect(result.kind, MediaKind.image);
     },
     skip: skipIf('BFL_API_KEY'),
-    timeout: slow,
   );
 
   test(
@@ -63,7 +64,6 @@ void main() {
       expect(result.bytes, isNotEmpty);
     },
     skip: skipIf('OPENAI_API_KEY'),
-    timeout: slow,
   );
 
   test(
@@ -75,7 +75,6 @@ void main() {
       expect(result.bytes, isNotEmpty);
     },
     skip: skipIf('GEMINI_API_KEY'),
-    timeout: slow,
   );
 
   test(
@@ -92,7 +91,6 @@ void main() {
       expect(result.kind, MediaKind.video);
     },
     skip: skipIf('GEMINI_API_KEY'),
-    timeout: slow,
   );
 
   test(
@@ -108,7 +106,6 @@ void main() {
       expect(result.kind, MediaKind.speech);
     },
     skip: skipIf('ELEVENLABS_API_KEY'),
-    timeout: slow,
   );
 
   test(
@@ -123,7 +120,6 @@ void main() {
       expect(result.bytes, isNotEmpty);
     },
     skip: skipIf('ELEVENLABS_API_KEY'),
-    timeout: slow,
   );
 
   test(
@@ -137,6 +133,5 @@ void main() {
       expect(result.kind, MediaKind.music);
     },
     skip: skipIf('SUNO_API_KEY'),
-    timeout: slow,
   );
 }
