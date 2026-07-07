@@ -4,6 +4,7 @@ import '../generation_request.dart';
 import '../media_kind.dart';
 
 /// A request to generate a short non-musical sound effect.
+/// {@category Requests and results}
 @immutable
 final class SoundEffectRequest extends GenerationRequest {
   /// Creates a [SoundEffectRequest].

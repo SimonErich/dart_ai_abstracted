@@ -9,6 +9,7 @@ import '../core/media_kind.dart';
 import '../core/requests/text_request.dart';
 
 /// An in-memory [TextGenerator] for tests: returns a fixed completion.
+/// {@category Testing}
 class FakeTextGenerator implements TextGenerator {
   /// Creates a [FakeTextGenerator] that always returns [text].
   ///

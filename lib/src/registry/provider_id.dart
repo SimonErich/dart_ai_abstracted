@@ -2,6 +2,7 @@
 ///
 /// Each value carries a stable lower-case wire name in [id], used to label
 /// errors and to key credentials.
+/// {@category Providers}
 enum ProviderId {
   /// Google Gemini (text and image; "Nano Banana" image model).
   gemini('gemini'),

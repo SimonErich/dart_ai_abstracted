@@ -3,6 +3,7 @@ import '../core/generation_result.dart';
 import '../core/requests/text_request.dart';
 
 /// The capability of turning a [TextRequest] into a text completion.
+/// {@category Capabilities}
 // ignore: one_member_abstracts, the contract is a type so it can be injected and faked
 abstract interface class TextGenerator {
   /// Generates text for [request].

@@ -20,6 +20,7 @@ import '../../transport/retrying_http.dart';
 const _defaultModel = 'mistral-large-latest';
 
 /// Mistral text generation over the OpenAI-style `/v1/chat/completions` API.
+/// {@category Providers}
 final class MistralTextClient implements TextGenerator {
   /// Creates a [MistralTextClient].
   MistralTextClient({

@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 
 /// Who authored a [TextMessage] in a conversation.
+/// {@category Requests and results}
 enum TextRole {
   /// A turn written by the human (or calling application).
   user,
@@ -14,6 +15,7 @@ enum TextRole {
 /// Build prior turns with [TextMessage.user] and [TextMessage.assistant] and
 /// pass them as the request history; the current user turn stays the request
 /// prompt.
+/// {@category Requests and results}
 @immutable
 final class TextMessage {
   /// Creates a [TextMessage] authored by the user.

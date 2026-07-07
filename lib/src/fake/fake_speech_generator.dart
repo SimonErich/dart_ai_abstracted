@@ -8,6 +8,7 @@ import '../core/media_kind.dart';
 import '../core/requests/speech_request.dart';
 
 /// An in-memory [SpeechGenerator] for tests: no network, deterministic bytes.
+/// {@category Testing}
 class FakeSpeechGenerator implements SpeechGenerator {
   /// Creates a [FakeSpeechGenerator].
   ///

@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 
 /// Credentials and connection settings for a single provider.
+/// {@category Credentials}
 @immutable
 final class ProviderCredentials {
   /// Creates [ProviderCredentials] authenticating with [apiKey].

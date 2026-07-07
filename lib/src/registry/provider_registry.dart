@@ -25,6 +25,7 @@ import 'provider_id.dart';
 ///
 /// Each method returns the provider's implementation of one capability, or
 /// throws an [AiInvalidRequestException] when that provider does not offer it.
+/// {@category Providers}
 final class ProviderRegistry {
   /// Creates a [ProviderRegistry].
   const ProviderRegistry();

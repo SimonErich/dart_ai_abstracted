@@ -20,6 +20,7 @@ import '../../transport/retrying_http.dart';
 const _defaultModel = 'gpt-image-1';
 
 /// OpenAI image generation over the `/v1/images/generations` endpoint.
+/// {@category Providers}
 final class OpenAiImageClient implements ImageGenerator {
   /// Creates an [OpenAiImageClient].
   OpenAiImageClient({

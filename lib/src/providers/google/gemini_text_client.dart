@@ -21,6 +21,7 @@ import 'gemini_parts.dart';
 const _defaultModel = 'gemini-2.5-flash';
 
 /// Gemini text generation over the `generateContent` REST endpoint.
+/// {@category Providers}
 final class GeminiTextClient implements TextGenerator {
   /// Creates a [GeminiTextClient].
   GeminiTextClient({

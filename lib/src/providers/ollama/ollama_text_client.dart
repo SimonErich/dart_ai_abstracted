@@ -20,6 +20,7 @@ import '../../transport/retrying_http.dart';
 const _defaultModel = 'llama3.1';
 
 /// Ollama local text generation over the `/api/chat` endpoint.
+/// {@category Providers}
 final class OllamaTextClient implements TextGenerator {
   /// Creates an [OllamaTextClient].
   OllamaTextClient({

@@ -3,6 +3,7 @@ import '../core/generation_result.dart';
 import '../core/requests/sound_effect_request.dart';
 
 /// The capability of turning a [SoundEffectRequest] into sound-effect bytes.
+/// {@category Capabilities}
 // ignore: one_member_abstracts, the contract is a type so it can be injected and faked
 abstract interface class SoundEffectGenerator {
   /// Generates a sound effect for [request].

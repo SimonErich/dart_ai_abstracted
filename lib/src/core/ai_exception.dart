@@ -12,6 +12,7 @@
 /// for a network or 5xx failure, or [AiResponseException] for an unusable
 /// response body.
 /// {@endtemplate}
+/// {@category Errors}
 class AiException implements Exception {
   /// Creates an [AiException] for [provider] with [message].
   AiException(
@@ -44,6 +45,7 @@ class AiException implements Exception {
 }
 
 /// Raised when the provider rejects the credentials (HTTP 401 or 403).
+/// {@category Errors}
 final class AiAuthException extends AiException {
   /// Creates an [AiAuthException].
   AiAuthException(
@@ -58,6 +60,7 @@ final class AiAuthException extends AiException {
 }
 
 /// Raised when the provider rate-limits the request (HTTP 429).
+/// {@category Errors}
 final class AiRateLimitException extends AiException {
   /// Creates an [AiRateLimitException], optionally carrying [retryAfter].
   AiRateLimitException(
@@ -76,6 +79,7 @@ final class AiRateLimitException extends AiException {
 }
 
 /// Raised when the request itself is invalid (HTTP 400 or 422).
+/// {@category Errors}
 final class AiInvalidRequestException extends AiException {
   /// Creates an [AiInvalidRequestException].
   AiInvalidRequestException(
@@ -90,6 +94,7 @@ final class AiInvalidRequestException extends AiException {
 }
 
 /// Raised for retryable failures: 5xx responses, network errors, or timeouts.
+/// {@category Errors}
 final class AiTransientException extends AiException {
   /// Creates an [AiTransientException].
   AiTransientException(
@@ -104,6 +109,7 @@ final class AiTransientException extends AiException {
 }
 
 /// Raised when the provider returns a malformed or unexpected response body.
+/// {@category Errors}
 final class AiResponseException extends AiException {
   /// Creates an [AiResponseException].
   AiResponseException(
@@ -123,6 +129,7 @@ final class AiResponseException extends AiException {
 /// A provider that runs the request as a long-running job (polled until it
 /// finishes) throws an [AiTimeoutException] when the poll deadline passes.
 /// {@endtemplate}
+/// {@category Errors}
 final class AiTimeoutException extends AiException {
   /// Creates an [AiTimeoutException].
   AiTimeoutException(

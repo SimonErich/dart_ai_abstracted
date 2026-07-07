@@ -1,0 +1,24 @@
+dartdoc:
+  categoryOrder:
+    - Capabilities
+    - Requests and results
+    - Providers
+    - Credentials
+    - Errors
+    - Retries
+    - Testing
+  categories:
+    Capabilities:
+      markdown: doc/categories/capabilities.md
+    "Requests and results":
+      markdown: doc/categories/requests-and-results.md
+    Providers:
+      markdown: doc/categories/providers.md
+    Credentials:
+      markdown: doc/categories/credentials.md
+    Errors:
+      markdown: doc/categories/errors.md
+    Retries:
+      markdown: doc/categories/retries.md
+    Testing:
+      markdown: doc/categories/testing.md

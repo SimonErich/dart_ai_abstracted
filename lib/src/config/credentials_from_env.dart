@@ -9,6 +9,7 @@ import 'provider_credentials.dart';
 /// always resolves to credentials with an empty [ProviderCredentials.apiKey].
 /// Veo authenticates through the Gemini API: it reads `GEMINI_API_KEY`, but a
 /// `VEO_API_KEY` entry overrides it when present.
+/// {@category Credentials}
 @useResult
 ProviderCredentials? credentialsFromEnv(
   ProviderId provider,
@@ -29,6 +30,7 @@ ProviderCredentials? credentialsFromEnv(
 ///
 /// Ollama is always included (keyless). Veo is included whenever a Gemini or
 /// Veo-override key is present.
+/// {@category Credentials}
 @useResult
 Map<ProviderId, ProviderCredentials> allCredentialsFromEnv(
   Map<String, String> env,

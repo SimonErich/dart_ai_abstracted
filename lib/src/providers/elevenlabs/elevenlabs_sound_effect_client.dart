@@ -12,6 +12,7 @@ import '../../transport/retry_policy.dart';
 import '../../transport/retrying_http.dart';
 
 /// ElevenLabs sound-effect synthesis: a JSON POST that answers with audio.
+/// {@category Providers}
 final class ElevenLabsSoundEffectClient implements SoundEffectGenerator {
   /// Creates an [ElevenLabsSoundEffectClient].
   ElevenLabsSoundEffectClient({

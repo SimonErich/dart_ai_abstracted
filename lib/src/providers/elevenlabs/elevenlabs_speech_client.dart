@@ -18,6 +18,7 @@ const _defaultVoice = '21m00Tcm4TlvDq8ikWAM';
 const _defaultModel = 'eleven_multilingual_v2';
 
 /// ElevenLabs text-to-speech: a JSON POST that answers with audio bytes.
+/// {@category Providers}
 final class ElevenLabsSpeechClient implements SpeechGenerator {
   /// Creates an [ElevenLabsSpeechClient].
   ElevenLabsSpeechClient({

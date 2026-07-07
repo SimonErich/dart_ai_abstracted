@@ -8,6 +8,7 @@ import '../core/media_kind.dart';
 import '../core/requests/sound_effect_request.dart';
 
 /// An in-memory [SoundEffectGenerator] for tests: deterministic, no network.
+/// {@category Testing}
 class FakeSoundEffectGenerator implements SoundEffectGenerator {
   /// Creates a [FakeSoundEffectGenerator].
   ///

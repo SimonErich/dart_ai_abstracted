@@ -3,6 +3,7 @@ import '../core/generation_result.dart';
 import '../core/requests/music_request.dart';
 
 /// The capability of turning a [MusicRequest] into music bytes.
+/// {@category Capabilities}
 // ignore: one_member_abstracts, the contract is a type so it can be injected and faked
 abstract interface class MusicGenerator {
   /// Generates a music track for [request].

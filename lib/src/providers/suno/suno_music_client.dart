@@ -16,6 +16,7 @@ import '../../transport/retrying_http.dart';
 import 'suno_record.dart';
 
 /// Suno music generation: submit a task, poll a record, then download.
+/// {@category Providers}
 final class SunoMusicClient implements MusicGenerator {
   /// Creates a [SunoMusicClient].
   SunoMusicClient({

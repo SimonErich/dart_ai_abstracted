@@ -20,6 +20,7 @@ import '../../transport/retrying_http.dart';
 const _defaultModel = 'claude-opus-4-8';
 
 /// Anthropic Claude text generation over the `/v1/messages` endpoint.
+/// {@category Providers}
 final class ClaudeTextClient implements TextGenerator {
   /// Creates a [ClaudeTextClient].
   ClaudeTextClient({

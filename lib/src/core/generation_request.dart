@@ -9,6 +9,7 @@ import 'media_kind.dart';
 /// report their [kind]. Subclassing this outside the package is not supported:
 /// every capability accepts one specific request type, so a new subtype has
 /// nowhere to plug in.
+/// {@category Requests and results}
 @immutable
 abstract class GenerationRequest {
   /// Creates a [GenerationRequest] with the shared [prompt], [seed] and [model].

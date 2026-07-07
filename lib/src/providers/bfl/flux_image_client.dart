@@ -18,6 +18,7 @@ import '../../transport/retrying_http.dart';
 const _defaultModel = 'flux-pro-1.1';
 
 /// FLUX image generation: a submit, then a poll-until-Ready, then a download.
+/// {@category Providers}
 final class FluxImageClient implements ImageGenerator {
   /// Creates a [FluxImageClient].
   FluxImageClient({

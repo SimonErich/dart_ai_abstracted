@@ -4,6 +4,7 @@ import '../generation_request.dart';
 import '../media_kind.dart';
 
 /// A request to generate a video clip.
+/// {@category Requests and results}
 @immutable
 final class VideoRequest extends GenerationRequest {
   /// Creates a [VideoRequest].

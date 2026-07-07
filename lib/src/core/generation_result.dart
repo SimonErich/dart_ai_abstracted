@@ -9,6 +9,7 @@ import 'media_kind.dart';
 /// The normalized output of any generation: bytes plus describing metadata.
 ///
 /// The package never writes files; callers persist or cache [bytes] themselves.
+/// {@category Requests and results}
 @immutable
 final class GenerationResult {
   /// Creates a [GenerationResult].

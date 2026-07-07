@@ -20,6 +20,7 @@ import 'gemini_parts.dart';
 const _defaultModel = 'gemini-2.5-flash-image';
 
 /// Gemini image generation over the `generateContent` REST endpoint.
+/// {@category Providers}
 final class GeminiImageClient implements ImageGenerator {
   /// Creates a [GeminiImageClient].
   GeminiImageClient({

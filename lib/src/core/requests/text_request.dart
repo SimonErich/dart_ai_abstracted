@@ -6,6 +6,7 @@ import '../text_image.dart';
 import '../text_message.dart';
 
 /// A request for a text completion.
+/// {@category Requests and results}
 @immutable
 final class TextRequest extends GenerationRequest {
   /// Creates a [TextRequest].

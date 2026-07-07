@@ -3,6 +3,7 @@ import '../core/generation_result.dart';
 import '../core/requests/video_request.dart';
 
 /// The capability of turning a [VideoRequest] into video bytes.
+/// {@category Capabilities}
 // ignore: one_member_abstracts, the contract is a type so it can be injected and faked
 abstract interface class VideoGenerator {
   /// Generates a video for [request].

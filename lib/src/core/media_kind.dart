@@ -1,4 +1,5 @@
 /// The six mediums this package normalizes behind uniform capability contracts.
+/// {@category Requests and results}
 enum MediaKind {
   /// Plain text completion (returned as UTF-8 bytes).
   text,

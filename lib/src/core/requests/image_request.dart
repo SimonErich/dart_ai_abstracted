@@ -4,6 +4,7 @@ import '../generation_request.dart';
 import '../media_kind.dart';
 
 /// A request to generate a still image.
+/// {@category Requests and results}
 @immutable
 final class ImageRequest extends GenerationRequest {
   /// Creates an [ImageRequest].

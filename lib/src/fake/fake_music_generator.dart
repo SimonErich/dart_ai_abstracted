@@ -8,6 +8,7 @@ import '../core/media_kind.dart';
 import '../core/requests/music_request.dart';
 
 /// An in-memory [MusicGenerator] for tests: no network, deterministic bytes.
+/// {@category Testing}
 class FakeMusicGenerator implements MusicGenerator {
   /// Creates a [FakeMusicGenerator].
   ///

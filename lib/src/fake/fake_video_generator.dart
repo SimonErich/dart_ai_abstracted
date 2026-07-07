@@ -8,6 +8,7 @@ import '../core/media_kind.dart';
 import '../core/requests/video_request.dart';
 
 /// An in-memory [VideoGenerator] for tests: no network, deterministic bytes.
+/// {@category Testing}
 class FakeVideoGenerator implements VideoGenerator {
   /// Creates a [FakeVideoGenerator].
   ///

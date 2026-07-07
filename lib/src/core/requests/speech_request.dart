@@ -6,6 +6,7 @@ import '../media_kind.dart';
 /// A request to synthesize speech from text.
 ///
 /// Here [prompt] is the text to speak, not a description of it.
+/// {@category Requests and results}
 @immutable
 final class SpeechRequest extends GenerationRequest {
   /// Creates a [SpeechRequest]; [prompt] is the text to speak.

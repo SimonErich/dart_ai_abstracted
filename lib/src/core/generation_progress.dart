@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 
 /// The coarse lifecycle stage of a generation job.
+/// {@category Requests and results}
 enum GenerationStage {
   /// The job has been accepted but has not started running yet.
   queued,
@@ -16,6 +17,7 @@ enum GenerationStage {
 }
 
 /// A progress update emitted while a generation job runs.
+/// {@category Requests and results}
 @immutable
 final class GenerationProgress {
   /// Creates a [GenerationProgress] in [stage].

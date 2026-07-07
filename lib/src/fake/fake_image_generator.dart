@@ -8,6 +8,7 @@ import '../core/media_kind.dart';
 import '../core/requests/image_request.dart';
 
 /// An in-memory [ImageGenerator] for tests: no network, deterministic bytes.
+/// {@category Testing}
 class FakeImageGenerator implements ImageGenerator {
   /// Creates a [FakeImageGenerator].
   ///

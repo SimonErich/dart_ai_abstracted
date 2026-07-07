@@ -22,6 +22,7 @@ import 'veo_operation.dart';
 const _defaultModel = 'veo-3.0-generate-001';
 
 /// Google Veo video generation: a long-running predict job, then a download.
+/// {@category Providers}
 final class VeoVideoClient implements VideoGenerator {
   /// Creates a [VeoVideoClient].
   VeoVideoClient({

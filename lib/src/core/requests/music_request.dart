@@ -4,6 +4,7 @@ import '../generation_request.dart';
 import '../media_kind.dart';
 
 /// A request to generate a musical track.
+/// {@category Requests and results}
 @immutable
 final class MusicRequest extends GenerationRequest {
   /// Creates a [MusicRequest].

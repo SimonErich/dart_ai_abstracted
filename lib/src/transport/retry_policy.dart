@@ -10,6 +10,7 @@ import 'package:meta/meta.dart';
 /// Every client accepts a [RetryPolicy]. Implement this class to supply a
 /// custom backoff curve (for example a fixed delay); override [delayFor] and
 /// the fields the clients read ([maxAttempts]).
+/// {@category Retries}
 @immutable
 interface class RetryPolicy {
   /// Creates a [RetryPolicy].
@@ -61,5 +62,6 @@ interface class RetryPolicy {
 }
 
 /// Whether an HTTP [code] should be retried (429 rate-limit or any 5xx).
+/// {@category Retries}
 @useResult
 bool retryableStatus(int code) => code == 429 || (code >= 500 && code < 600);

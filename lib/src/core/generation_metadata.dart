@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 ///
 /// Every field except [model] is optional so the same shape fits all six
 /// mediums; providers fill in what they report.
+/// {@category Requests and results}
 @immutable
 final class GenerationMetadata {
   /// Creates a [GenerationMetadata] for [model].

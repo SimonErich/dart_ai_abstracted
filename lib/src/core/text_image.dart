@@ -7,6 +7,7 @@ import 'package:meta/meta.dart';
 /// Only providers with vision input use it; clients that cannot accept an image
 /// ignore it. The [bytes] are sent inline (base64) where the provider supports
 /// inline image data.
+/// {@category Requests and results}
 @immutable
 final class TextImage {
   /// Creates a [TextImage] from raw [bytes] of the given [mimeType].
