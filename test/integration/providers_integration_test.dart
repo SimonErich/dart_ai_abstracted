@@ -31,107 +31,71 @@ void main() {
   ProviderCredentials creds(String key) =>
       ProviderCredentials(apiKey: env[key]!);
 
-  test(
-    'Flux image (BFL)',
-    () async {
-      final result = await FluxImageClient(credentials: creds('BFL_API_KEY'))
-          .generateImage(
-            const ImageRequest(
-              prompt: 'a tiny red square on white',
-              width: 256,
-              height: 256,
-            ),
-          );
-      expect(result.bytes, isNotEmpty);
-      expect(result.kind, MediaKind.image);
-    },
-    skip: skipIf('BFL_API_KEY'),
-  );
+  test('Flux image (BFL)', () async {
+    final result = await FluxImageClient(credentials: creds('BFL_API_KEY'))
+        .generateImage(
+          const ImageRequest(
+            prompt: 'a tiny red square on white',
+            width: 256,
+            height: 256,
+          ),
+        );
+    expect(result.bytes, isNotEmpty);
+    expect(result.kind, MediaKind.image);
+  }, skip: skipIf('BFL_API_KEY'));
 
-  test(
-    'OpenAI image',
-    () async {
-      final result =
-          await OpenAiImageClient(
-            credentials: creds('OPENAI_API_KEY'),
-          ).generateImage(
-            const ImageRequest(
-              prompt: 'a tiny red square on white',
-              width: 256,
-              height: 256,
-            ),
-          );
-      expect(result.bytes, isNotEmpty);
-    },
-    skip: skipIf('OPENAI_API_KEY'),
-  );
+  test('OpenAI image', () async {
+    final result = await OpenAiImageClient(credentials: creds('OPENAI_API_KEY'))
+        .generateImage(
+          const ImageRequest(
+            prompt: 'a tiny red square on white',
+            width: 256,
+            height: 256,
+          ),
+        );
+    expect(result.bytes, isNotEmpty);
+  }, skip: skipIf('OPENAI_API_KEY'));
 
-  test(
-    'Gemini image (Nano Banana)',
-    () async {
-      final result = await GeminiImageClient(
-        credentials: creds('GEMINI_API_KEY'),
-      ).generateImage(const ImageRequest(prompt: 'a tiny red square on white'));
-      expect(result.bytes, isNotEmpty);
-    },
-    skip: skipIf('GEMINI_API_KEY'),
-  );
+  test('Gemini image (Nano Banana)', () async {
+    final result = await GeminiImageClient(
+      credentials: creds('GEMINI_API_KEY'),
+    ).generateImage(const ImageRequest(prompt: 'a tiny red square on white'));
+    expect(result.bytes, isNotEmpty);
+  }, skip: skipIf('GEMINI_API_KEY'));
 
-  test(
-    'Veo video (with audio)',
-    () async {
-      final result = await VeoVideoClient(credentials: creds('GEMINI_API_KEY'))
-          .generateVideo(
-            const VideoRequest(
-              prompt: 'a calm ocean wave at sunset',
-              seconds: 4,
-            ),
-          );
-      expect(result.bytes, isNotEmpty);
-      expect(result.kind, MediaKind.video);
-    },
-    skip: skipIf('GEMINI_API_KEY'),
-  );
+  test('Veo video (with audio)', () async {
+    final result = await VeoVideoClient(credentials: creds('GEMINI_API_KEY'))
+        .generateVideo(
+          const VideoRequest(prompt: 'a calm ocean wave at sunset', seconds: 4),
+        );
+    expect(result.bytes, isNotEmpty);
+    expect(result.kind, MediaKind.video);
+  }, skip: skipIf('GEMINI_API_KEY'));
 
-  test(
-    'ElevenLabs speech',
-    () async {
-      final result =
-          await ElevenLabsSpeechClient(
-            credentials: creds('ELEVENLABS_API_KEY'),
-          ).generateSpeech(
-            const SpeechRequest(prompt: 'Hello from ai_abstracted.'),
-          );
-      expect(result.bytes, isNotEmpty);
-      expect(result.kind, MediaKind.speech);
-    },
-    skip: skipIf('ELEVENLABS_API_KEY'),
-  );
+  test('ElevenLabs speech', () async {
+    final result = await ElevenLabsSpeechClient(
+      credentials: creds('ELEVENLABS_API_KEY'),
+    ).generateSpeech(const SpeechRequest(prompt: 'Hello from ai_abstracted.'));
+    expect(result.bytes, isNotEmpty);
+    expect(result.kind, MediaKind.speech);
+  }, skip: skipIf('ELEVENLABS_API_KEY'));
 
-  test(
-    'ElevenLabs sound effect',
-    () async {
-      final result =
-          await ElevenLabsSoundEffectClient(
-            credentials: creds('ELEVENLABS_API_KEY'),
-          ).generateSoundEffect(
-            const SoundEffectRequest(prompt: 'a short whoosh', seconds: 1.5),
-          );
-      expect(result.bytes, isNotEmpty);
-    },
-    skip: skipIf('ELEVENLABS_API_KEY'),
-  );
+  test('ElevenLabs sound effect', () async {
+    final result =
+        await ElevenLabsSoundEffectClient(
+          credentials: creds('ELEVENLABS_API_KEY'),
+        ).generateSoundEffect(
+          const SoundEffectRequest(prompt: 'a short whoosh', seconds: 1.5),
+        );
+    expect(result.bytes, isNotEmpty);
+  }, skip: skipIf('ELEVENLABS_API_KEY'));
 
-  test(
-    'Suno music',
-    () async {
-      final result = await SunoMusicClient(credentials: creds('SUNO_API_KEY'))
-          .generateMusic(
-            const MusicRequest(prompt: 'lofi hip hop, 90bpm', seconds: 10),
-          );
-      expect(result.bytes, isNotEmpty);
-      expect(result.kind, MediaKind.music);
-    },
-    skip: skipIf('SUNO_API_KEY'),
-  );
+  test('Suno music', () async {
+    final result = await SunoMusicClient(credentials: creds('SUNO_API_KEY'))
+        .generateMusic(
+          const MusicRequest(prompt: 'lofi hip hop, 90bpm', seconds: 10),
+        );
+    expect(result.bytes, isNotEmpty);
+    expect(result.kind, MediaKind.music);
+  }, skip: skipIf('SUNO_API_KEY'));
 }
