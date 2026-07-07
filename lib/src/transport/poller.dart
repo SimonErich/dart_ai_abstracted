@@ -1,5 +1,5 @@
-import 'package:ai_abstracted/src/core/ai_exception.dart';
-import 'package:ai_abstracted/src/core/generation_progress.dart';
+import '../core/ai_exception.dart';
+import '../core/generation_progress.dart';
 
 /// Polls [poll] every [interval] until it returns a non-null result.
 ///
@@ -22,7 +22,9 @@ Future<R> pollUntil<R>({
   var first = true;
   while (true) {
     onProgress?.call(
-      GenerationProgress(stage: first ? GenerationStage.queued : GenerationStage.running),
+      GenerationProgress(
+        stage: first ? GenerationStage.queued : GenerationStage.running,
+      ),
     );
     first = false;
 
@@ -32,7 +34,10 @@ Future<R> pollUntil<R>({
     }
 
     if (now().difference(start) > timeout) {
-      throw AiTimeoutException('Polling exceeded ${timeout.inSeconds}s', provider: provider);
+      throw AiTimeoutException(
+        'Polling exceeded ${timeout.inSeconds}s',
+        provider: provider,
+      );
     }
     await sleep(interval);
   }

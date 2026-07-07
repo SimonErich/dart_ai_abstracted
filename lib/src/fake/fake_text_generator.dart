@@ -1,15 +1,15 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:ai_abstracted/src/contracts/text_generator.dart';
-import 'package:ai_abstracted/src/core/generation_metadata.dart';
-import 'package:ai_abstracted/src/core/generation_progress.dart';
-import 'package:ai_abstracted/src/core/generation_result.dart';
-import 'package:ai_abstracted/src/core/media_kind.dart';
-import 'package:ai_abstracted/src/core/requests/text_request.dart';
+import '../contracts/text_generator.dart';
+import '../core/generation_metadata.dart';
+import '../core/generation_progress.dart';
+import '../core/generation_result.dart';
+import '../core/media_kind.dart';
+import '../core/requests/text_request.dart';
 
 /// An in-memory [TextGenerator] for tests: returns a fixed completion.
-final class FakeTextGenerator implements TextGenerator {
+class FakeTextGenerator implements TextGenerator {
   /// Creates a [FakeTextGenerator] that always returns [text].
   ///
   /// [metadata] is echoed on the result; the bytes are the UTF-8 encoding of

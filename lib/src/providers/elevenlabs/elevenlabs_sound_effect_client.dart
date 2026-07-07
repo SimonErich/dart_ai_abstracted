@@ -1,14 +1,15 @@
-import 'package:ai_abstracted/src/config/provider_credentials.dart';
-import 'package:ai_abstracted/src/contracts/sound_effect_generator.dart';
-import 'package:ai_abstracted/src/core/generation_metadata.dart';
-import 'package:ai_abstracted/src/core/generation_progress.dart';
-import 'package:ai_abstracted/src/core/generation_result.dart';
-import 'package:ai_abstracted/src/core/media_kind.dart';
-import 'package:ai_abstracted/src/core/requests/sound_effect_request.dart';
-import 'package:ai_abstracted/src/transport/binary_http.dart';
-import 'package:ai_abstracted/src/transport/retry_policy.dart';
-import 'package:ai_abstracted/src/transport/retrying_http.dart';
 import 'package:http/http.dart' as http;
+
+import '../../config/provider_credentials.dart';
+import '../../contracts/sound_effect_generator.dart';
+import '../../core/generation_metadata.dart';
+import '../../core/generation_progress.dart';
+import '../../core/generation_result.dart';
+import '../../core/media_kind.dart';
+import '../../core/requests/sound_effect_request.dart';
+import '../../transport/binary_http.dart';
+import '../../transport/retry_policy.dart';
+import '../../transport/retrying_http.dart';
 
 /// ElevenLabs sound-effect synthesis: a JSON POST that answers with audio.
 final class ElevenLabsSoundEffectClient implements SoundEffectGenerator {
@@ -67,6 +68,7 @@ final class ElevenLabsSoundEffectClient implements SoundEffectGenerator {
   Map<String, Object?> _body(SoundEffectRequest request) => {
     'text': request.prompt,
     if (request.seconds != null) 'duration_seconds': request.seconds,
-    if (request.promptInfluence != null) 'prompt_influence': request.promptInfluence,
+    if (request.promptInfluence != null)
+      'prompt_influence': request.promptInfluence,
   };
 }

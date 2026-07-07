@@ -1,6 +1,6 @@
-import 'package:ai_abstracted/src/core/generation_progress.dart';
-import 'package:ai_abstracted/src/core/generation_result.dart';
-import 'package:ai_abstracted/src/core/requests/text_request.dart';
+import '../core/generation_progress.dart';
+import '../core/generation_result.dart';
+import '../core/requests/text_request.dart';
 
 /// The capability of turning a [TextRequest] into a text completion.
 // ignore: one_member_abstracts, the contract is a type so it can be injected and faked
@@ -9,7 +9,9 @@ abstract interface class TextGenerator {
   ///
   /// Calls [onProgress] with lifecycle updates when provided. The completion is
   /// returned as UTF-8 bytes in the result, with MIME type `text/plain`; read
-  /// it conveniently via `GenerationResult.text`.
+  /// it conveniently via [GenerationResult.text].
+  ///
+  /// {@macro ai_abstracted.throws}
   Future<GenerationResult> generateText(
     TextRequest request, {
     void Function(GenerationProgress)? onProgress,

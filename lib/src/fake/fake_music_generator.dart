@@ -1,14 +1,14 @@
 import 'dart:typed_data';
 
-import 'package:ai_abstracted/src/contracts/music_generator.dart';
-import 'package:ai_abstracted/src/core/generation_metadata.dart';
-import 'package:ai_abstracted/src/core/generation_progress.dart';
-import 'package:ai_abstracted/src/core/generation_result.dart';
-import 'package:ai_abstracted/src/core/media_kind.dart';
-import 'package:ai_abstracted/src/core/requests/music_request.dart';
+import '../contracts/music_generator.dart';
+import '../core/generation_metadata.dart';
+import '../core/generation_progress.dart';
+import '../core/generation_result.dart';
+import '../core/media_kind.dart';
+import '../core/requests/music_request.dart';
 
 /// An in-memory [MusicGenerator] for tests: no network, deterministic bytes.
-final class FakeMusicGenerator implements MusicGenerator {
+class FakeMusicGenerator implements MusicGenerator {
   /// Creates a [FakeMusicGenerator].
   ///
   /// [bytes] are returned verbatim (a tiny deterministic default otherwise),

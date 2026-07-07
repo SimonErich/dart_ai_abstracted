@@ -23,7 +23,10 @@ void main() {
                 'content': {
                   'parts': [
                     {
-                      'inlineData': {'mimeType': 'image/png', 'data': base64Encode(png)},
+                      'inlineData': {
+                        'mimeType': 'image/png',
+                        'data': base64Encode(png),
+                      },
                     },
                   ],
                 },
@@ -34,7 +37,10 @@ void main() {
           headers: const {'content-type': 'application/json'},
         );
       });
-      final generator = GeminiImageClient(credentials: _creds, httpClient: client);
+      final generator = GeminiImageClient(
+        credentials: _creds,
+        httpClient: client,
+      );
       final stages = <GenerationStage>[];
       final result = await generator.generateImage(
         const ImageRequest(prompt: 'a fox', width: 512, height: 512),
@@ -77,7 +83,9 @@ void main() {
       final generator = GeminiImageClient(
         credentials: _creds,
         httpClient: client,
-        endpoint: Uri.parse('https://proxy.test/v1beta/models/m:generateContent'),
+        endpoint: Uri.parse(
+          'https://proxy.test/v1beta/models/m:generateContent',
+        ),
       );
       await generator.generateImage(const ImageRequest(prompt: 'x'));
       expect(seen.url.host, 'proxy.test');
@@ -102,7 +110,10 @@ void main() {
           headers: const {'content-type': 'application/json'},
         );
       });
-      final generator = GeminiImageClient(credentials: _creds, httpClient: client);
+      final generator = GeminiImageClient(
+        credentials: _creds,
+        httpClient: client,
+      );
       expect(
         () => generator.generateImage(const ImageRequest(prompt: 'x')),
         throwsA(isA<AiResponseException>()),
@@ -111,7 +122,10 @@ void main() {
 
     test('maps a 401 to AiAuthException', () {
       final client = MockClient((_) async => http.Response('no', 401));
-      final generator = GeminiImageClient(credentials: _creds, httpClient: client);
+      final generator = GeminiImageClient(
+        credentials: _creds,
+        httpClient: client,
+      );
       expect(
         () => generator.generateImage(const ImageRequest(prompt: 'x')),
         throwsA(isA<AiAuthException>()),
@@ -138,7 +152,10 @@ void main() {
           headers: const {'content-type': 'application/json'},
         );
       });
-      final generator = GeminiTextClient(credentials: _creds, httpClient: client);
+      final generator = GeminiTextClient(
+        credentials: _creds,
+        httpClient: client,
+      );
       final stages = <GenerationStage>[];
       final result = await generator.generateText(
         const TextRequest(prompt: 'hi'),
@@ -158,7 +175,10 @@ void main() {
           headers: const {'content-type': 'application/json'},
         );
       });
-      final generator = GeminiTextClient(credentials: _creds, httpClient: client);
+      final generator = GeminiTextClient(
+        credentials: _creds,
+        httpClient: client,
+      );
       expect(
         () => generator.generateText(const TextRequest(prompt: 'x')),
         throwsA(isA<AiResponseException>()),
@@ -185,7 +205,10 @@ void main() {
           headers: const {'content-type': 'application/json'},
         );
       });
-      final generator = GeminiTextClient(credentials: _creds, httpClient: client);
+      final generator = GeminiTextClient(
+        credentials: _creds,
+        httpClient: client,
+      );
       await generator.generateText(
         const TextRequest(prompt: 'hi', system: 'be terse', temperature: 0.3),
       );
@@ -214,7 +237,10 @@ void main() {
           headers: const {'content-type': 'application/json'},
         );
       });
-      final generator = GeminiTextClient(credentials: _creds, httpClient: client);
+      final generator = GeminiTextClient(
+        credentials: _creds,
+        httpClient: client,
+      );
       await generator.generateText(const TextRequest(prompt: 'hi'));
       final body = jsonDecode(seen.body) as Map<String, Object?>;
       expect(body, {
@@ -250,11 +276,17 @@ void main() {
           headers: const {'content-type': 'application/json'},
         );
       });
-      final generator = GeminiTextClient(credentials: _creds, httpClient: client);
+      final generator = GeminiTextClient(
+        credentials: _creds,
+        httpClient: client,
+      );
       await generator.generateText(
         TextRequest(
           prompt: 'and now?',
-          history: const [TextMessage.user('hi'), TextMessage.assistant('hello')],
+          history: const [
+            TextMessage.user('hi'),
+            TextMessage.assistant('hello'),
+          ],
           image: TextImage(bytes: Uint8List.fromList(const [1, 2, 3])),
           jsonSchema: const {'type': 'object'},
         ),
@@ -277,7 +309,11 @@ void main() {
 
     test('maps a 500 to AiTransientException after retries', () {
       final client = MockClient((_) async => http.Response('boom', 500));
-      final generator = GeminiTextClient(credentials: _creds, httpClient: client, sleep: _noSleep);
+      final generator = GeminiTextClient(
+        credentials: _creds,
+        httpClient: client,
+        sleep: _noSleep,
+      );
       expect(
         () => generator.generateText(const TextRequest(prompt: 'x')),
         throwsA(isA<AiTransientException>()),
@@ -286,62 +322,73 @@ void main() {
   });
 
   group('VeoVideoClient', () {
-    test('starts a job, polls to done, downloads the mp4, sets hasAudio', () async {
-      final mp4 = Uint8List.fromList([9, 9, 9, 9]);
-      var polls = 0;
-      final client = MockClient((request) async {
-        final url = request.url.toString();
-        if (request.method == 'POST' && url.contains(':predictLongRunning')) {
-          return http.Response(
-            jsonEncode({'name': 'operations/abc'}),
-            200,
-            headers: const {'content-type': 'application/json'},
-          );
-        }
-        if (request.method == 'GET' && url.contains('operations/abc')) {
-          polls++;
-          if (polls < 2) {
+    test(
+      'starts a job, polls to done, downloads the mp4, sets hasAudio',
+      () async {
+        final mp4 = Uint8List.fromList([9, 9, 9, 9]);
+        var polls = 0;
+        final client = MockClient((request) async {
+          final url = request.url.toString();
+          if (request.method == 'POST' && url.contains(':predictLongRunning')) {
             return http.Response(
-              jsonEncode({'name': 'operations/abc', 'done': false}),
+              jsonEncode({'name': 'operations/abc'}),
               200,
               headers: const {'content-type': 'application/json'},
             );
           }
-          return http.Response(
-            jsonEncode({
-              'name': 'operations/abc',
-              'done': true,
-              'response': {
-                'generateVideoResponse': {
-                  'generatedSamples': [
-                    {
-                      'video': {'uri': 'https://veo.test/out.mp4'},
-                    },
-                  ],
+          if (request.method == 'GET' && url.contains('operations/abc')) {
+            polls++;
+            if (polls < 2) {
+              return http.Response(
+                jsonEncode({'name': 'operations/abc', 'done': false}),
+                200,
+                headers: const {'content-type': 'application/json'},
+              );
+            }
+            return http.Response(
+              jsonEncode({
+                'name': 'operations/abc',
+                'done': true,
+                'response': {
+                  'generateVideoResponse': {
+                    'generatedSamples': [
+                      {
+                        'video': {'uri': 'https://veo.test/out.mp4'},
+                      },
+                    ],
+                  },
                 },
-              },
-            }),
-            200,
-            headers: const {'content-type': 'application/json'},
-          );
-        }
-        if (url.contains('out.mp4')) {
-          return http.Response.bytes(mp4, 200, headers: const {'content-type': 'video/mp4'});
-        }
-        return http.Response('unexpected', 404);
-      });
+              }),
+              200,
+              headers: const {'content-type': 'application/json'},
+            );
+          }
+          if (url.contains('out.mp4')) {
+            return http.Response.bytes(
+              mp4,
+              200,
+              headers: const {'content-type': 'video/mp4'},
+            );
+          }
+          return http.Response('unexpected', 404);
+        });
 
-      final generator = VeoVideoClient(credentials: _creds, httpClient: client, sleep: _noSleep);
-      final stages = <GenerationStage>[];
-      final result = await generator.generateVideo(
-        const VideoRequest(prompt: 'a wave'),
-        onProgress: (p) => stages.add(p.stage),
-      );
-      expect(result.kind, MediaKind.video);
-      expect(result.bytes, mp4);
-      expect(result.metadata.hasAudio, isTrue);
-      expect(stages, contains(GenerationStage.done));
-    });
+        final generator = VeoVideoClient(
+          credentials: _creds,
+          httpClient: client,
+          sleep: _noSleep,
+        );
+        final stages = <GenerationStage>[];
+        final result = await generator.generateVideo(
+          const VideoRequest(prompt: 'a wave'),
+          onProgress: (p) => stages.add(p.stage),
+        );
+        expect(result.kind, MediaKind.video);
+        expect(result.bytes, mp4);
+        expect(result.metadata.hasAudio, isTrue);
+        expect(stages, contains(GenerationStage.done));
+      },
+    );
 
     test('forwards the api key via the x-goog-api-key header', () async {
       late http.Request seen;
@@ -367,7 +414,11 @@ void main() {
           headers: const {'content-type': 'application/json'},
         );
       });
-      final generator = VeoVideoClient(credentials: _creds, httpClient: client, sleep: _noSleep);
+      final generator = VeoVideoClient(
+        credentials: _creds,
+        httpClient: client,
+        sleep: _noSleep,
+      );
       await generator.generateVideo(const VideoRequest(prompt: 'x'));
       expect(seen.headers['x-goog-api-key'], 'k-123');
     });
@@ -380,34 +431,49 @@ void main() {
           headers: const {'content-type': 'application/json'},
         );
       });
-      final generator = VeoVideoClient(credentials: _creds, httpClient: client, sleep: _noSleep);
+      final generator = VeoVideoClient(
+        credentials: _creds,
+        httpClient: client,
+        sleep: _noSleep,
+      );
       expect(
         () => generator.generateVideo(const VideoRequest(prompt: 'x')),
         throwsA(isA<AiResponseException>()),
       );
     });
 
-    test('throws AiResponseException when the finished operation has no sample', () {
-      final client = MockClient((request) async {
-        if (request.method == 'POST') {
+    test(
+      'throws AiResponseException when the finished operation has no sample',
+      () {
+        final client = MockClient((request) async {
+          if (request.method == 'POST') {
+            return http.Response(
+              jsonEncode({'name': 'operations/empty'}),
+              200,
+              headers: const {'content-type': 'application/json'},
+            );
+          }
           return http.Response(
-            jsonEncode({'name': 'operations/empty'}),
+            jsonEncode({
+              'name': 'operations/empty',
+              'done': true,
+              'response': <String, Object?>{},
+            }),
             200,
             headers: const {'content-type': 'application/json'},
           );
-        }
-        return http.Response(
-          jsonEncode({'name': 'operations/empty', 'done': true, 'response': <String, Object?>{}}),
-          200,
-          headers: const {'content-type': 'application/json'},
+        });
+        final generator = VeoVideoClient(
+          credentials: _creds,
+          httpClient: client,
+          sleep: _noSleep,
         );
-      });
-      final generator = VeoVideoClient(credentials: _creds, httpClient: client, sleep: _noSleep);
-      expect(
-        () => generator.generateVideo(const VideoRequest(prompt: 'x')),
-        throwsA(isA<AiResponseException>()),
-      );
-    });
+        expect(
+          () => generator.generateVideo(const VideoRequest(prompt: 'x')),
+          throwsA(isA<AiResponseException>()),
+        );
+      },
+    );
 
     test('passes an aspect ratio through to the predict parameters', () async {
       late http.Request submit;
@@ -440,8 +506,14 @@ void main() {
           headers: const {'content-type': 'application/json'},
         );
       });
-      final generator = VeoVideoClient(credentials: _creds, httpClient: client, sleep: _noSleep);
-      await generator.generateVideo(const VideoRequest(prompt: 'x', aspectRatio: '16:9'));
+      final generator = VeoVideoClient(
+        credentials: _creds,
+        httpClient: client,
+        sleep: _noSleep,
+      );
+      await generator.generateVideo(
+        const VideoRequest(prompt: 'x', aspectRatio: '16:9'),
+      );
       final body = jsonDecode(submit.body) as Map<String, Object?>;
       expect((body['parameters']! as Map)['aspectRatio'], '16:9');
     });

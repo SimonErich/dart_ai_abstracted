@@ -1,24 +1,25 @@
-import 'package:ai_abstracted/src/config/provider_credentials.dart';
-import 'package:ai_abstracted/src/contracts/image_generator.dart';
-import 'package:ai_abstracted/src/contracts/music_generator.dart';
-import 'package:ai_abstracted/src/contracts/sound_effect_generator.dart';
-import 'package:ai_abstracted/src/contracts/speech_generator.dart';
-import 'package:ai_abstracted/src/contracts/text_generator.dart';
-import 'package:ai_abstracted/src/contracts/video_generator.dart';
-import 'package:ai_abstracted/src/core/ai_exception.dart';
-import 'package:ai_abstracted/src/providers/anthropic/claude_text_client.dart';
-import 'package:ai_abstracted/src/providers/bfl/flux_image_client.dart';
-import 'package:ai_abstracted/src/providers/elevenlabs/elevenlabs_sound_effect_client.dart';
-import 'package:ai_abstracted/src/providers/elevenlabs/elevenlabs_speech_client.dart';
-import 'package:ai_abstracted/src/providers/google/gemini_image_client.dart';
-import 'package:ai_abstracted/src/providers/google/gemini_text_client.dart';
-import 'package:ai_abstracted/src/providers/google/veo_video_client.dart';
-import 'package:ai_abstracted/src/providers/mistral/mistral_text_client.dart';
-import 'package:ai_abstracted/src/providers/ollama/ollama_text_client.dart';
-import 'package:ai_abstracted/src/providers/openai/openai_image_client.dart';
-import 'package:ai_abstracted/src/providers/suno/suno_music_client.dart';
-import 'package:ai_abstracted/src/registry/provider_id.dart';
 import 'package:http/http.dart' as http;
+
+import '../config/provider_credentials.dart';
+import '../contracts/image_generator.dart';
+import '../contracts/music_generator.dart';
+import '../contracts/sound_effect_generator.dart';
+import '../contracts/speech_generator.dart';
+import '../contracts/text_generator.dart';
+import '../contracts/video_generator.dart';
+import '../core/ai_exception.dart';
+import '../providers/anthropic/claude_text_client.dart';
+import '../providers/bfl/flux_image_client.dart';
+import '../providers/elevenlabs/elevenlabs_sound_effect_client.dart';
+import '../providers/elevenlabs/elevenlabs_speech_client.dart';
+import '../providers/google/gemini_image_client.dart';
+import '../providers/google/gemini_text_client.dart';
+import '../providers/google/veo_video_client.dart';
+import '../providers/mistral/mistral_text_client.dart';
+import '../providers/ollama/ollama_text_client.dart';
+import '../providers/openai/openai_image_client.dart';
+import '../providers/suno/suno_music_client.dart';
+import 'provider_id.dart';
 
 /// Resolves a [ProviderId] and [ProviderCredentials] to a concrete client.
 ///
@@ -36,11 +37,20 @@ final class ProviderRegistry {
   }) {
     switch (id) {
       case ProviderId.gemini:
-        return GeminiImageClient(credentials: credentials, httpClient: httpClient);
+        return GeminiImageClient(
+          credentials: credentials,
+          httpClient: httpClient,
+        );
       case ProviderId.openai:
-        return OpenAiImageClient(credentials: credentials, httpClient: httpClient);
+        return OpenAiImageClient(
+          credentials: credentials,
+          httpClient: httpClient,
+        );
       case ProviderId.flux:
-        return FluxImageClient(credentials: credentials, httpClient: httpClient);
+        return FluxImageClient(
+          credentials: credentials,
+          httpClient: httpClient,
+        );
       case ProviderId.veo:
       case ProviderId.elevenLabs:
       case ProviderId.suno:
@@ -70,7 +80,10 @@ final class ProviderRegistry {
     http.Client? httpClient,
   }) {
     if (id == ProviderId.elevenLabs) {
-      return ElevenLabsSpeechClient(credentials: credentials, httpClient: httpClient);
+      return ElevenLabsSpeechClient(
+        credentials: credentials,
+        httpClient: httpClient,
+      );
     }
     throw _unsupported(id, 'speech');
   }
@@ -82,7 +95,10 @@ final class ProviderRegistry {
     http.Client? httpClient,
   }) {
     if (id == ProviderId.elevenLabs) {
-      return ElevenLabsSoundEffectClient(credentials: credentials, httpClient: httpClient);
+      return ElevenLabsSoundEffectClient(
+        credentials: credentials,
+        httpClient: httpClient,
+      );
     }
     throw _unsupported(id, 'sound effect');
   }
@@ -107,13 +123,25 @@ final class ProviderRegistry {
   }) {
     switch (id) {
       case ProviderId.gemini:
-        return GeminiTextClient(credentials: credentials, httpClient: httpClient);
+        return GeminiTextClient(
+          credentials: credentials,
+          httpClient: httpClient,
+        );
       case ProviderId.claude:
-        return ClaudeTextClient(credentials: credentials, httpClient: httpClient);
+        return ClaudeTextClient(
+          credentials: credentials,
+          httpClient: httpClient,
+        );
       case ProviderId.mistral:
-        return MistralTextClient(credentials: credentials, httpClient: httpClient);
+        return MistralTextClient(
+          credentials: credentials,
+          httpClient: httpClient,
+        );
       case ProviderId.ollama:
-        return OllamaTextClient(credentials: credentials, httpClient: httpClient);
+        return OllamaTextClient(
+          credentials: credentials,
+          httpClient: httpClient,
+        );
       case ProviderId.veo:
       case ProviderId.openai:
       case ProviderId.flux:

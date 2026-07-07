@@ -1,14 +1,14 @@
 import 'dart:typed_data';
 
-import 'package:ai_abstracted/src/contracts/speech_generator.dart';
-import 'package:ai_abstracted/src/core/generation_metadata.dart';
-import 'package:ai_abstracted/src/core/generation_progress.dart';
-import 'package:ai_abstracted/src/core/generation_result.dart';
-import 'package:ai_abstracted/src/core/media_kind.dart';
-import 'package:ai_abstracted/src/core/requests/speech_request.dart';
+import '../contracts/speech_generator.dart';
+import '../core/generation_metadata.dart';
+import '../core/generation_progress.dart';
+import '../core/generation_result.dart';
+import '../core/media_kind.dart';
+import '../core/requests/speech_request.dart';
 
 /// An in-memory [SpeechGenerator] for tests: no network, deterministic bytes.
-final class FakeSpeechGenerator implements SpeechGenerator {
+class FakeSpeechGenerator implements SpeechGenerator {
   /// Creates a [FakeSpeechGenerator].
   ///
   /// [bytes] are returned verbatim (a tiny deterministic default otherwise),

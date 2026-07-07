@@ -1,9 +1,12 @@
 # Analysis for ai_abstracted. Built on the official Dart recommended lints, with
-# a few extra strictness knobs and mandatory documentation on the public API.
+# extra strictness, mandatory public-API docs, and a curated set of rules that
+# keep the style choices this package makes enforced rather than incidental.
 include: package:lints/recommended.yaml
 
+# The dart format default. A standalone published package reads best at the
+# width pub.dev renders code in.
 formatter:
-  page_width: 100
+  page_width: 80
 
 analyzer:
   language:
@@ -16,7 +19,22 @@ analyzer:
 
 linter:
   rules:
+    # Documentation.
     public_member_api_docs: true
+    comment_references: true
+    # Imports and directives: relative within lib/, sorted, string part-of.
+    prefer_relative_imports: true
     directives_ordering: true
+    # Style the package already follows, now enforced.
+    prefer_final_locals: true
     require_trailing_commas: true
     unawaited_futures: true
+    unnecessary_async: true
+    prefer_const_constructors_in_immutables: true
+    avoid_classes_with_only_static_members: true
+    avoid_setters_without_getters: true
+    avoid_positional_boolean_parameters: true
+    type_annotate_public_apis: true
+    # Error handling: never swallow, never catch Error, always rethrow.
+    avoid_catching_errors: true
+    use_rethrow_when_possible: true

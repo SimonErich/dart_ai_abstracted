@@ -3,11 +3,15 @@ import 'package:meta/meta.dart';
 /// An exponential-backoff retry policy with bounded, deterministic jitter.
 ///
 /// [delayFor] returns `baseDelay * 2^(attempt - 1)`, clamped to [maxDelay] and
-/// spread by up to ±[jitter] of that value. The jitter is derived from the
+/// spread by up to [jitter] of that value. The jitter is derived from the
 /// attempt number rather than a random source, so backoff is reproducible in
 /// tests while still staggering retries in practice.
+///
+/// Every client accepts a [RetryPolicy]. Implement this class to supply a
+/// custom backoff curve (for example a fixed delay); override [delayFor] and
+/// the fields the clients read ([maxAttempts]).
 @immutable
-final class RetryPolicy {
+interface class RetryPolicy {
   /// Creates a [RetryPolicy].
   ///
   /// [maxAttempts] caps total tries, [baseDelay] is the first backoff step,
@@ -34,13 +38,16 @@ final class RetryPolicy {
   /// The backoff [Duration] before the [attempt]-th retry (1-based).
   ///
   /// Attempts below 1 clamp to the first step. The result is bounded by
-  /// [maxDelay] and offset by a deterministic jitter within ±[jitter].
+  /// [maxDelay] and offset by a deterministic jitter within [jitter].
+  @useResult
   Duration delayFor(int attempt) {
     final step = attempt < 1 ? 1 : attempt;
     // Cap the shift so large attempts never overflow the int before clamping.
     final shift = (step - 1).clamp(0, 30);
     final exponential = baseDelay.inMilliseconds * (1 << shift);
-    final capped = exponential > maxDelay.inMilliseconds ? maxDelay.inMilliseconds : exponential;
+    final capped = exponential > maxDelay.inMilliseconds
+        ? maxDelay.inMilliseconds
+        : exponential;
     final offset = (capped * jitter * _signedJitter(step)).round();
     return Duration(milliseconds: capped + offset);
   }
@@ -54,4 +61,5 @@ final class RetryPolicy {
 }
 
 /// Whether an HTTP [code] should be retried (429 rate-limit or any 5xx).
+@useResult
 bool retryableStatus(int code) => code == 429 || (code >= 500 && code < 600);

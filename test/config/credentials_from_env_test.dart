@@ -27,7 +27,10 @@ void main() {
 
     test('returns null when the key is absent', () {
       expect(credentialsFromEnv(ProviderId.gemini, const {}), isNull);
-      expect(credentialsFromEnv(ProviderId.openai, const {'GEMINI_API_KEY': 'g'}), isNull);
+      expect(
+        credentialsFromEnv(ProviderId.openai, const {'GEMINI_API_KEY': 'g'}),
+        isNull,
+      );
     });
 
     test('ollama is keyless and always resolves to empty credentials', () {
@@ -39,8 +42,14 @@ void main() {
 
   group('allCredentialsFromEnv', () {
     test('maps only the providers present in the env (plus ollama)', () {
-      final all = allCredentialsFromEnv(const {'OPENAI_API_KEY': 'o', 'SUNO_API_KEY': 's'});
-      expect(all.keys, containsAll([ProviderId.openai, ProviderId.suno, ProviderId.ollama]));
+      final all = allCredentialsFromEnv(const {
+        'OPENAI_API_KEY': 'o',
+        'SUNO_API_KEY': 's',
+      });
+      expect(
+        all.keys,
+        containsAll([ProviderId.openai, ProviderId.suno, ProviderId.ollama]),
+      );
       expect(all.containsKey(ProviderId.gemini), isFalse);
       expect(all[ProviderId.openai]!.apiKey, 'o');
     });

@@ -45,7 +45,10 @@ void main() {
     });
 
     test('withAudio can be disabled', () {
-      expect(const VideoRequest(prompt: 'x', withAudio: false).withAudio, isFalse);
+      expect(
+        const VideoRequest(prompt: 'x', withAudio: false).withAudio,
+        isFalse,
+      );
     });
   });
 
@@ -71,7 +74,11 @@ void main() {
 
   group('SoundEffectRequest', () {
     test('kind, defaults and fields', () {
-      const request = SoundEffectRequest(prompt: 'thunder', seconds: 3, promptInfluence: 0.4);
+      const request = SoundEffectRequest(
+        prompt: 'thunder',
+        seconds: 3,
+        promptInfluence: 0.4,
+      );
       expect(request.kind, MediaKind.soundEffect);
       expect(request.format, 'mp3');
       expect(request.seconds, 3);
@@ -96,7 +103,10 @@ void main() {
     });
 
     test('instrumental override', () {
-      expect(const MusicRequest(prompt: 'x', instrumental: true).instrumental, isTrue);
+      expect(
+        const MusicRequest(prompt: 'x', instrumental: true).instrumental,
+        isTrue,
+      );
     });
   });
 

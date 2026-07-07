@@ -1,19 +1,20 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:ai_abstracted/src/config/provider_credentials.dart';
-import 'package:ai_abstracted/src/contracts/text_generator.dart';
-import 'package:ai_abstracted/src/core/ai_exception.dart';
-import 'package:ai_abstracted/src/core/generation_metadata.dart';
-import 'package:ai_abstracted/src/core/generation_progress.dart';
-import 'package:ai_abstracted/src/core/generation_result.dart';
-import 'package:ai_abstracted/src/core/media_kind.dart';
-import 'package:ai_abstracted/src/core/requests/text_request.dart';
-import 'package:ai_abstracted/src/core/text_message.dart';
-import 'package:ai_abstracted/src/transport/json_http.dart';
-import 'package:ai_abstracted/src/transport/retry_policy.dart';
-import 'package:ai_abstracted/src/transport/retrying_http.dart';
 import 'package:http/http.dart' as http;
+
+import '../../config/provider_credentials.dart';
+import '../../contracts/text_generator.dart';
+import '../../core/ai_exception.dart';
+import '../../core/generation_metadata.dart';
+import '../../core/generation_progress.dart';
+import '../../core/generation_result.dart';
+import '../../core/media_kind.dart';
+import '../../core/requests/text_request.dart';
+import '../../core/text_message.dart';
+import '../../transport/json_http.dart';
+import '../../transport/retry_policy.dart';
+import '../../transport/retrying_http.dart';
 
 /// The default Anthropic Claude text model.
 const _defaultModel = 'claude-opus-4-8';
@@ -57,7 +58,10 @@ final class ClaudeTextClient implements TextGenerator {
       () => postJson(
         _http,
         endpoint ?? Uri.parse('https://api.anthropic.com/v1/messages'),
-        headers: {'x-api-key': credentials.apiKey, 'anthropic-version': '2023-06-01'},
+        headers: {
+          'x-api-key': credentials.apiKey,
+          'anthropic-version': '2023-06-01',
+        },
         body: _body(request, model),
         provider: _provider,
       ),
@@ -68,7 +72,10 @@ final class ClaudeTextClient implements TextGenerator {
     }
     final text = _firstText(json);
     if (text == null) {
-      throw AiResponseException('Claude returned no text block', provider: _provider);
+      throw AiResponseException(
+        'Claude returned no text block',
+        provider: _provider,
+      );
     }
     onProgress?.call(const GenerationProgress(stage: GenerationStage.done));
     return GenerationResult(
@@ -87,7 +94,10 @@ final class ClaudeTextClient implements TextGenerator {
       if (request.system != null) 'system': request.system,
       'messages': [
         for (final turn in request.history)
-          {'role': turn.role == TextRole.assistant ? 'assistant' : 'user', 'content': turn.text},
+          {
+            'role': turn.role == TextRole.assistant ? 'assistant' : 'user',
+            'content': turn.text,
+          },
         {'role': 'user', 'content': _finalContent(request)},
       ],
     };
@@ -118,7 +128,9 @@ final class ClaudeTextClient implements TextGenerator {
       return null;
     }
     for (final block in content) {
-      if (block is Map<String, Object?> && block['type'] == 'text' && block['text'] is String) {
+      if (block is Map<String, Object?> &&
+          block['type'] == 'text' &&
+          block['text'] is String) {
         return block['text']! as String;
       }
     }

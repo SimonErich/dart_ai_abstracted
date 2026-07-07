@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 /// Every field except [model] is optional so the same shape fits all six
 /// mediums; providers fill in what they report.
 @immutable
-class GenerationMetadata {
+final class GenerationMetadata {
   /// Creates a [GenerationMetadata] for [model].
   const GenerationMetadata({
     required this.model,
@@ -39,5 +39,8 @@ class GenerationMetadata {
   final Map<String, Object?> extra;
 
   /// [durationMs] expressed as a [Duration], or null when unknown.
-  Duration? get duration => durationMs == null ? null : Duration(milliseconds: durationMs!);
+  Duration? get duration {
+    final durationMs = this.durationMs;
+    return durationMs == null ? null : Duration(milliseconds: durationMs);
+  }
 }

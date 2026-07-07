@@ -1,8 +1,9 @@
-import 'package:ai_abstracted/src/core/generation_request.dart';
-import 'package:ai_abstracted/src/core/media_kind.dart';
-import 'package:ai_abstracted/src/core/text_image.dart';
-import 'package:ai_abstracted/src/core/text_message.dart';
 import 'package:meta/meta.dart';
+
+import '../generation_request.dart';
+import '../media_kind.dart';
+import '../text_image.dart';
+import '../text_message.dart';
 
 /// A request for a text completion.
 @immutable

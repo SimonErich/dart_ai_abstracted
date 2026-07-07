@@ -1,5 +1,7 @@
-import 'package:ai_abstracted/src/config/provider_credentials.dart';
-import 'package:ai_abstracted/src/registry/provider_id.dart';
+import 'package:meta/meta.dart';
+
+import '../registry/provider_id.dart';
+import 'provider_credentials.dart';
 
 /// Builds [ProviderCredentials] for [provider] from an environment map [env].
 ///
@@ -7,9 +9,13 @@ import 'package:ai_abstracted/src/registry/provider_id.dart';
 /// always resolves to credentials with an empty [ProviderCredentials.apiKey].
 /// Veo authenticates through the Gemini API: it reads `GEMINI_API_KEY`, but a
 /// `VEO_API_KEY` entry overrides it when present.
-ProviderCredentials? credentialsFromEnv(ProviderId provider, Map<String, String> env) {
+@useResult
+ProviderCredentials? credentialsFromEnv(
+  ProviderId provider,
+  Map<String, String> env,
+) {
   if (provider == ProviderId.ollama) {
-    return const ProviderCredentials(apiKey: '');
+    return const ProviderCredentials.keyless();
   }
   if (provider == ProviderId.veo) {
     final key = env['VEO_API_KEY'] ?? env['GEMINI_API_KEY'];
@@ -23,7 +29,10 @@ ProviderCredentials? credentialsFromEnv(ProviderId provider, Map<String, String>
 ///
 /// Ollama is always included (keyless). Veo is included whenever a Gemini or
 /// Veo-override key is present.
-Map<ProviderId, ProviderCredentials> allCredentialsFromEnv(Map<String, String> env) {
+@useResult
+Map<ProviderId, ProviderCredentials> allCredentialsFromEnv(
+  Map<String, String> env,
+) {
   final result = <ProviderId, ProviderCredentials>{};
   for (final provider in ProviderId.values) {
     final credentials = credentialsFromEnv(provider, env);

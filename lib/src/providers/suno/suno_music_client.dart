@@ -1,18 +1,19 @@
-import 'package:ai_abstracted/src/config/provider_credentials.dart';
-import 'package:ai_abstracted/src/contracts/music_generator.dart';
-import 'package:ai_abstracted/src/core/ai_exception.dart';
-import 'package:ai_abstracted/src/core/generation_metadata.dart';
-import 'package:ai_abstracted/src/core/generation_progress.dart';
-import 'package:ai_abstracted/src/core/generation_result.dart';
-import 'package:ai_abstracted/src/core/media_kind.dart';
-import 'package:ai_abstracted/src/core/requests/music_request.dart';
-import 'package:ai_abstracted/src/providers/suno/suno_record.dart';
-import 'package:ai_abstracted/src/transport/binary_http.dart';
-import 'package:ai_abstracted/src/transport/json_http.dart';
-import 'package:ai_abstracted/src/transport/poller.dart';
-import 'package:ai_abstracted/src/transport/retry_policy.dart';
-import 'package:ai_abstracted/src/transport/retrying_http.dart';
 import 'package:http/http.dart' as http;
+
+import '../../config/provider_credentials.dart';
+import '../../contracts/music_generator.dart';
+import '../../core/ai_exception.dart';
+import '../../core/generation_metadata.dart';
+import '../../core/generation_progress.dart';
+import '../../core/generation_result.dart';
+import '../../core/media_kind.dart';
+import '../../core/requests/music_request.dart';
+import '../../transport/binary_http.dart';
+import '../../transport/json_http.dart';
+import '../../transport/poller.dart';
+import '../../transport/retry_policy.dart';
+import '../../transport/retrying_http.dart';
+import 'suno_record.dart';
 
 /// Suno music generation: submit a task, poll a record, then download.
 final class SunoMusicClient implements MusicGenerator {
@@ -50,7 +51,9 @@ final class SunoMusicClient implements MusicGenerator {
   static const _provider = 'suno';
   static const _host = 'https://api.sunoapi.org/api/v1';
 
-  Map<String, String> get _headers => {'authorization': 'Bearer ${credentials.apiKey}'};
+  Map<String, String> get _headers => {
+    'authorization': 'Bearer ${credentials.apiKey}',
+  };
 
   @override
   Future<GenerationResult> generateMusic(
@@ -70,7 +73,10 @@ final class SunoMusicClient implements MusicGenerator {
     );
     final taskId = sunoTaskId(submit);
     if (taskId == null) {
-      throw AiResponseException('Suno did not return a task id', provider: _provider);
+      throw AiResponseException(
+        'Suno did not return a task id',
+        provider: _provider,
+      );
     }
 
     final audioUrl = await pollUntil<String>(
@@ -82,7 +88,9 @@ final class SunoMusicClient implements MusicGenerator {
       provider: _provider,
     );
 
-    onProgress?.call(const GenerationProgress(stage: GenerationStage.downloading));
+    onProgress?.call(
+      const GenerationProgress(stage: GenerationStage.downloading),
+    );
     final audio = await withRetry(
       retryPolicy,
       () => getBytes(_http, Uri.parse(audioUrl), provider: _provider),
@@ -93,7 +101,10 @@ final class SunoMusicClient implements MusicGenerator {
       bytes: audio.bytes,
       mimeType: audio.mimeType,
       kind: MediaKind.music,
-      metadata: GenerationMetadata(model: request.model ?? 'suno', providerJobId: taskId),
+      metadata: GenerationMetadata(
+        model: request.model ?? 'suno',
+        providerJobId: taskId,
+      ),
       seedUsed: request.seed,
     );
   }

@@ -4,9 +4,22 @@
 /// optional HTTP [statusCode], and an optional underlying [cause]. Concrete
 /// subclasses narrow the failure mode (auth, rate limit, and so on) and give a
 /// distinct [toString] label.
+///
+/// {@template ai_abstracted.throws}
+/// Throws an [AiException] subclass when the call fails: [AiAuthException] for
+/// rejected credentials, [AiRateLimitException] when rate limited,
+/// [AiInvalidRequestException] for a rejected request, [AiTransientException]
+/// for a network or 5xx failure, or [AiResponseException] for an unusable
+/// response body.
+/// {@endtemplate}
 class AiException implements Exception {
   /// Creates an [AiException] for [provider] with [message].
-  AiException(this.message, {required this.provider, this.statusCode, this.cause});
+  AiException(
+    this.message, {
+    required this.provider,
+    this.statusCode,
+    this.cause,
+  });
 
   /// A human-readable description of what went wrong.
   final String message;
@@ -31,16 +44,21 @@ class AiException implements Exception {
 }
 
 /// Raised when the provider rejects the credentials (HTTP 401 or 403).
-class AiAuthException extends AiException {
+final class AiAuthException extends AiException {
   /// Creates an [AiAuthException].
-  AiAuthException(super.message, {required super.provider, super.statusCode, super.cause});
+  AiAuthException(
+    super.message, {
+    required super.provider,
+    super.statusCode,
+    super.cause,
+  });
 
   @override
   String get _label => 'AiAuthException';
 }
 
 /// Raised when the provider rate-limits the request (HTTP 429).
-class AiRateLimitException extends AiException {
+final class AiRateLimitException extends AiException {
   /// Creates an [AiRateLimitException], optionally carrying [retryAfter].
   AiRateLimitException(
     super.message, {
@@ -58,7 +76,7 @@ class AiRateLimitException extends AiException {
 }
 
 /// Raised when the request itself is invalid (HTTP 400 or 422).
-class AiInvalidRequestException extends AiException {
+final class AiInvalidRequestException extends AiException {
   /// Creates an [AiInvalidRequestException].
   AiInvalidRequestException(
     super.message, {
@@ -72,27 +90,47 @@ class AiInvalidRequestException extends AiException {
 }
 
 /// Raised for retryable failures: 5xx responses, network errors, or timeouts.
-class AiTransientException extends AiException {
+final class AiTransientException extends AiException {
   /// Creates an [AiTransientException].
-  AiTransientException(super.message, {required super.provider, super.statusCode, super.cause});
+  AiTransientException(
+    super.message, {
+    required super.provider,
+    super.statusCode,
+    super.cause,
+  });
 
   @override
   String get _label => 'AiTransientException';
 }
 
 /// Raised when the provider returns a malformed or unexpected response body.
-class AiResponseException extends AiException {
+final class AiResponseException extends AiException {
   /// Creates an [AiResponseException].
-  AiResponseException(super.message, {required super.provider, super.statusCode, super.cause});
+  AiResponseException(
+    super.message, {
+    required super.provider,
+    super.statusCode,
+    super.cause,
+  });
 
   @override
   String get _label => 'AiResponseException';
 }
 
 /// Raised when a long-running job poll exceeds its deadline.
-class AiTimeoutException extends AiException {
+///
+/// {@template ai_abstracted.throws_timeout}
+/// A provider that runs the request as a long-running job (polled until it
+/// finishes) throws an [AiTimeoutException] when the poll deadline passes.
+/// {@endtemplate}
+final class AiTimeoutException extends AiException {
   /// Creates an [AiTimeoutException].
-  AiTimeoutException(super.message, {required super.provider, super.statusCode, super.cause});
+  AiTimeoutException(
+    super.message, {
+    required super.provider,
+    super.statusCode,
+    super.cause,
+  });
 
   @override
   String get _label => 'AiTimeoutException';

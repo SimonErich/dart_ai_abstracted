@@ -5,7 +5,12 @@ void main() {
   group('AiException', () {
     test('is an Exception and exposes its fields', () {
       final cause = StateError('boom');
-      final exception = AiException('bad', provider: 'openai', statusCode: 500, cause: cause);
+      final exception = AiException(
+        'bad',
+        provider: 'openai',
+        statusCode: 500,
+        cause: cause,
+      );
       expect(exception, isA<Exception>());
       expect(exception.message, 'bad');
       expect(exception.provider, 'openai');
@@ -23,7 +28,10 @@ void main() {
     });
 
     test('toString omits the status when null', () {
-      expect(AiException('bad', provider: 'openai').toString(), isNot(contains('null')));
+      expect(
+        AiException('bad', provider: 'openai').toString(),
+        isNot(contains('null')),
+      );
     });
   });
 
@@ -45,20 +53,39 @@ void main() {
     });
 
     test('each subclass has a distinct toString label', () {
-      expect(AiAuthException('a', provider: 'p').toString(), contains('AiAuthException'));
-      expect(AiRateLimitException('a', provider: 'p').toString(), contains('AiRateLimitException'));
+      expect(
+        AiAuthException('a', provider: 'p').toString(),
+        contains('AiAuthException'),
+      );
+      expect(
+        AiRateLimitException('a', provider: 'p').toString(),
+        contains('AiRateLimitException'),
+      );
       expect(
         AiInvalidRequestException('a', provider: 'p').toString(),
         contains('AiInvalidRequestException'),
       );
-      expect(AiTransientException('a', provider: 'p').toString(), contains('AiTransientException'));
-      expect(AiResponseException('a', provider: 'p').toString(), contains('AiResponseException'));
-      expect(AiTimeoutException('a', provider: 'p').toString(), contains('AiTimeoutException'));
+      expect(
+        AiTransientException('a', provider: 'p').toString(),
+        contains('AiTransientException'),
+      );
+      expect(
+        AiResponseException('a', provider: 'p').toString(),
+        contains('AiResponseException'),
+      );
+      expect(
+        AiTimeoutException('a', provider: 'p').toString(),
+        contains('AiTimeoutException'),
+      );
     });
 
     test('rate limit carries an optional retryAfter', () {
       const retry = Duration(seconds: 3);
-      final exception = AiRateLimitException('a', provider: 'p', retryAfter: retry);
+      final exception = AiRateLimitException(
+        'a',
+        provider: 'p',
+        retryAfter: retry,
+      );
       expect(exception.retryAfter, retry);
       expect(AiRateLimitException('a', provider: 'p').retryAfter, isNull);
     });

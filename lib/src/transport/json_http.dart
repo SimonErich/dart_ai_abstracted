@@ -1,8 +1,9 @@
 import 'dart:convert';
 
-import 'package:ai_abstracted/src/core/ai_exception.dart';
-import 'package:ai_abstracted/src/transport/http_errors.dart';
 import 'package:http/http.dart' as http;
+
+import '../core/ai_exception.dart';
+import 'http_errors.dart';
 
 /// POSTs [body] as JSON to [uri] and returns the decoded JSON object.
 ///
@@ -38,18 +39,32 @@ Future<Map<String, Object?>> getJson(
   required Map<String, String> headers,
   required String provider,
 }) async {
-  final response = await _send(provider, () => client.get(uri, headers: headers));
+  final response = await _send(
+    provider,
+    () => client.get(uri, headers: headers),
+  );
   return _decodeObject(response, provider);
 }
 
-/// Runs [request], rethrowing [AiException]s and wrapping anything else.
-Future<http.Response> _send(String provider, Future<http.Response> Function() request) async {
+/// Runs [request], rethrowing [AiException]s and wrapping any other exception.
+///
+/// Only [Exception]s are wrapped as transient. An [Error] (a programming bug
+/// such as a bad argument or a state violation) propagates with its stack
+/// trace, so it is never mistaken for a retryable transport failure.
+Future<http.Response> _send(
+  String provider,
+  Future<http.Response> Function() request,
+) async {
   try {
     return await request();
   } on AiException {
     rethrow;
-  } on Object catch (error) {
-    throw AiTransientException('Transport failure: $error', provider: provider, cause: error);
+  } on Exception catch (error) {
+    throw AiTransientException(
+      'Transport failure: $error',
+      provider: provider,
+      cause: error,
+    );
   }
 }
 

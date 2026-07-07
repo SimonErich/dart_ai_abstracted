@@ -1,5 +1,5 @@
-import 'package:ai_abstracted/src/core/ai_exception.dart';
-import 'package:ai_abstracted/src/transport/retry_policy.dart';
+import '../core/ai_exception.dart';
+import 'retry_policy.dart';
 
 /// The default retry predicate: transient and rate-limit failures only.
 bool _isTransient(AiException error) =>

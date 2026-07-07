@@ -1,19 +1,20 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:ai_abstracted/src/config/provider_credentials.dart';
-import 'package:ai_abstracted/src/contracts/image_generator.dart';
-import 'package:ai_abstracted/src/core/ai_exception.dart';
-import 'package:ai_abstracted/src/core/generation_metadata.dart';
-import 'package:ai_abstracted/src/core/generation_progress.dart';
-import 'package:ai_abstracted/src/core/generation_result.dart';
-import 'package:ai_abstracted/src/core/media_kind.dart';
-import 'package:ai_abstracted/src/core/requests/image_request.dart';
-import 'package:ai_abstracted/src/transport/binary_http.dart';
-import 'package:ai_abstracted/src/transport/json_http.dart';
-import 'package:ai_abstracted/src/transport/retry_policy.dart';
-import 'package:ai_abstracted/src/transport/retrying_http.dart';
 import 'package:http/http.dart' as http;
+
+import '../../config/provider_credentials.dart';
+import '../../contracts/image_generator.dart';
+import '../../core/ai_exception.dart';
+import '../../core/generation_metadata.dart';
+import '../../core/generation_progress.dart';
+import '../../core/generation_result.dart';
+import '../../core/media_kind.dart';
+import '../../core/requests/image_request.dart';
+import '../../transport/binary_http.dart';
+import '../../transport/json_http.dart';
+import '../../transport/retry_policy.dart';
+import '../../transport/retrying_http.dart';
 
 /// The default OpenAI image model.
 const _defaultModel = 'gpt-image-1';
@@ -47,7 +48,7 @@ final class OpenAiImageClient implements ImageGenerator {
 
   Map<String, String> get _headers => {
     'authorization': 'Bearer ${credentials.apiKey}',
-    if (credentials.organization != null) 'openai-organization': credentials.organization!,
+    'openai-organization': ?credentials.organization,
   };
 
   @override
@@ -76,13 +77,21 @@ final class OpenAiImageClient implements ImageGenerator {
       bytes: result.bytes,
       mimeType: result.mimeType,
       kind: MediaKind.image,
-      metadata: GenerationMetadata(model: model, width: request.width, height: request.height),
+      metadata: GenerationMetadata(
+        model: model,
+        width: request.width,
+        height: request.height,
+      ),
       seedUsed: request.seed,
     );
   }
 
   Map<String, Object?> _body(ImageRequest request, String model) {
-    final body = <String, Object?>{'model': model, 'prompt': request.prompt, 'n': 1};
+    final body = <String, Object?>{
+      'model': model,
+      'prompt': request.prompt,
+      'n': 1,
+    };
     if (request.width != null && request.height != null) {
       body['size'] = '${request.width}x${request.height}';
     }
@@ -92,7 +101,10 @@ final class OpenAiImageClient implements ImageGenerator {
   Map<String, Object?> _firstData(Map<String, Object?> json) {
     final data = json['data'];
     if (data is! List || data.isEmpty || data.first is! Map<String, Object?>) {
-      throw AiResponseException('OpenAI returned no image data', provider: _provider);
+      throw AiResponseException(
+        'OpenAI returned no image data',
+        provider: _provider,
+      );
     }
     return data.first as Map<String, Object?>;
   }
@@ -100,7 +112,10 @@ final class OpenAiImageClient implements ImageGenerator {
   Future<BinaryResponse> _bytesFrom(Map<String, Object?> entry) async {
     final b64 = entry['b64_json'];
     if (b64 is String) {
-      return (bytes: Uint8List.fromList(base64Decode(b64)), mimeType: 'image/png');
+      return (
+        bytes: Uint8List.fromList(base64Decode(b64)),
+        mimeType: 'image/png',
+      );
     }
     final url = entry['url'];
     if (url is String) {
@@ -110,6 +125,9 @@ final class OpenAiImageClient implements ImageGenerator {
         sleep: sleep,
       );
     }
-    throw AiResponseException('OpenAI image entry had no bytes or url', provider: _provider);
+    throw AiResponseException(
+      'OpenAI image entry had no bytes or url',
+      provider: _provider,
+    );
   }
 }

@@ -1,21 +1,22 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:ai_abstracted/src/config/provider_credentials.dart';
-import 'package:ai_abstracted/src/contracts/video_generator.dart';
-import 'package:ai_abstracted/src/core/ai_exception.dart';
-import 'package:ai_abstracted/src/core/generation_metadata.dart';
-import 'package:ai_abstracted/src/core/generation_progress.dart';
-import 'package:ai_abstracted/src/core/generation_result.dart';
-import 'package:ai_abstracted/src/core/media_kind.dart';
-import 'package:ai_abstracted/src/core/requests/video_request.dart';
-import 'package:ai_abstracted/src/providers/google/veo_operation.dart';
-import 'package:ai_abstracted/src/transport/binary_http.dart';
-import 'package:ai_abstracted/src/transport/json_http.dart';
-import 'package:ai_abstracted/src/transport/poller.dart';
-import 'package:ai_abstracted/src/transport/retry_policy.dart';
-import 'package:ai_abstracted/src/transport/retrying_http.dart';
 import 'package:http/http.dart' as http;
+
+import '../../config/provider_credentials.dart';
+import '../../contracts/video_generator.dart';
+import '../../core/ai_exception.dart';
+import '../../core/generation_metadata.dart';
+import '../../core/generation_progress.dart';
+import '../../core/generation_result.dart';
+import '../../core/media_kind.dart';
+import '../../core/requests/video_request.dart';
+import '../../transport/binary_http.dart';
+import '../../transport/json_http.dart';
+import '../../transport/poller.dart';
+import '../../transport/retry_policy.dart';
+import '../../transport/retrying_http.dart';
+import 'veo_operation.dart';
 
 /// The default Veo model; Veo 3 carries an audio track.
 const _defaultModel = 'veo-3.0-generate-001';
@@ -56,7 +57,9 @@ final class VeoVideoClient implements VideoGenerator {
   static const _provider = 'veo';
   static const _host = 'https://generativelanguage.googleapis.com/v1beta';
 
-  Map<String, String> get _authHeaders => {'x-goog-api-key': credentials.apiKey};
+  Map<String, String> get _authHeaders => {
+    'x-goog-api-key': credentials.apiKey,
+  };
 
   @override
   Future<GenerationResult> generateVideo(
@@ -77,7 +80,10 @@ final class VeoVideoClient implements VideoGenerator {
     );
     final operationName = start['name'];
     if (operationName is! String) {
-      throw AiResponseException('Veo did not return an operation name', provider: _provider);
+      throw AiResponseException(
+        'Veo did not return an operation name',
+        provider: _provider,
+      );
     }
 
     final done = await pollUntil<Map<String, Object?>>(
@@ -89,7 +95,9 @@ final class VeoVideoClient implements VideoGenerator {
       provider: _provider,
     );
 
-    onProgress?.call(const GenerationProgress(stage: GenerationStage.downloading));
+    onProgress?.call(
+      const GenerationProgress(stage: GenerationStage.downloading),
+    );
     final bytes = await _downloadVideo(done);
     onProgress?.call(const GenerationProgress(stage: GenerationStage.done));
     return GenerationResult(
@@ -138,14 +146,22 @@ final class VeoVideoClient implements VideoGenerator {
   Future<Uint8List> _downloadVideo(Map<String, Object?> operation) async {
     final sample = veoSample(operation);
     if (sample == null) {
-      throw AiResponseException('Veo operation carried no video sample', provider: _provider);
+      throw AiResponseException(
+        'Veo operation carried no video sample',
+        provider: _provider,
+      );
     }
     if (sample.inlineBase64 != null) {
       return Uint8List.fromList(base64Decode(sample.inlineBase64!));
     }
     final download = await withRetry(
       retryPolicy,
-      () => getBytes(_http, Uri.parse(sample.uri!), headers: _authHeaders, provider: _provider),
+      () => getBytes(
+        _http,
+        Uri.parse(sample.uri!),
+        headers: _authHeaders,
+        provider: _provider,
+      ),
       sleep: sleep,
     );
     return download.bytes;

@@ -2,7 +2,7 @@ import 'package:meta/meta.dart';
 
 /// Credentials and connection settings for a single provider.
 @immutable
-class ProviderCredentials {
+final class ProviderCredentials {
   /// Creates [ProviderCredentials] authenticating with [apiKey].
   const ProviderCredentials({
     required this.apiKey,
@@ -12,7 +12,19 @@ class ProviderCredentials {
     this.extra = const {},
   });
 
-  /// The provider API key. May be empty for keyless providers (such as Ollama).
+  /// Creates credentials for a keyless provider such as Ollama.
+  ///
+  /// [apiKey] is left empty. Use this instead of passing an empty string, so a
+  /// missing key on a provider that needs one stays a loud error.
+  const ProviderCredentials.keyless({
+    this.baseUrl,
+    this.organization,
+    this.project,
+    this.extra = const {},
+  }) : apiKey = '';
+
+  /// The provider API key. Empty for keyless providers (such as Ollama); use
+  /// [ProviderCredentials.keyless] for that case.
   final String apiKey;
 
   /// An optional base URL override (for self-hosted or proxied endpoints).

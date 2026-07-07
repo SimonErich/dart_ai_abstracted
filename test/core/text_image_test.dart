@@ -12,7 +12,10 @@ void main() {
     });
 
     test('accepts a custom mime type', () {
-      final image = TextImage(bytes: Uint8List.fromList(const [9]), mimeType: 'image/jpeg');
+      final image = TextImage(
+        bytes: Uint8List.fromList(const [9]),
+        mimeType: 'image/jpeg',
+      );
       expect(image.mimeType, 'image/jpeg');
     });
   });

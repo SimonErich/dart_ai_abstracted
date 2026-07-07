@@ -53,15 +53,28 @@ void main() {
           );
         }
         if (url.contains('song.mp3')) {
-          return http.Response.bytes(audio, 200, headers: const {'content-type': 'audio/mpeg'});
+          return http.Response.bytes(
+            audio,
+            200,
+            headers: const {'content-type': 'audio/mpeg'},
+          );
         }
         return http.Response('unexpected', 404);
       });
 
-      final generator = SunoMusicClient(credentials: _creds, httpClient: client, sleep: _noSleep);
+      final generator = SunoMusicClient(
+        credentials: _creds,
+        httpClient: client,
+        sleep: _noSleep,
+      );
       final stages = <GenerationStage>[];
       final result = await generator.generateMusic(
-        const MusicRequest(prompt: 'lofi beats', instrumental: true, style: 'lofi', title: 'Chill'),
+        const MusicRequest(
+          prompt: 'lofi beats',
+          instrumental: true,
+          style: 'lofi',
+          title: 'Chill',
+        ),
         onProgress: (p) => stages.add(p.stage),
       );
       expect(result.kind, MediaKind.music);
@@ -79,7 +92,11 @@ void main() {
           headers: const {'content-type': 'application/json'},
         );
       });
-      final generator = SunoMusicClient(credentials: _creds, httpClient: client, sleep: _noSleep);
+      final generator = SunoMusicClient(
+        credentials: _creds,
+        httpClient: client,
+        sleep: _noSleep,
+      );
       expect(
         () => generator.generateMusic(const MusicRequest(prompt: 'x')),
         throwsA(isA<AiResponseException>()),
@@ -112,10 +129,20 @@ void main() {
             headers: const {'content-type': 'application/json'},
           );
         }
-        return http.Response.bytes(audio, 200, headers: const {'content-type': 'audio/mpeg'});
+        return http.Response.bytes(
+          audio,
+          200,
+          headers: const {'content-type': 'audio/mpeg'},
+        );
       });
-      final generator = SunoMusicClient(credentials: _creds, httpClient: client, sleep: _noSleep);
-      final result = await generator.generateMusic(const MusicRequest(prompt: 'x'));
+      final generator = SunoMusicClient(
+        credentials: _creds,
+        httpClient: client,
+        sleep: _noSleep,
+      );
+      final result = await generator.generateMusic(
+        const MusicRequest(prompt: 'x'),
+      );
       expect(result.bytes, audio);
     });
   });

@@ -27,7 +27,10 @@ void main() {
         seen = request;
         return _ok('hi there');
       });
-      final generator = ClaudeTextClient(credentials: _creds, httpClient: client);
+      final generator = ClaudeTextClient(
+        credentials: _creds,
+        httpClient: client,
+      );
       final stages = <GenerationStage>[];
       final result = await generator.generateText(
         const TextRequest(prompt: 'hi'),
@@ -56,12 +59,18 @@ void main() {
         seen = request;
         return _ok('ok');
       });
-      final generator = ClaudeTextClient(credentials: _creds, httpClient: client);
+      final generator = ClaudeTextClient(
+        credentials: _creds,
+        httpClient: client,
+      );
       await generator.generateText(
         TextRequest(
           prompt: 'and now?',
           system: 'be terse',
-          history: const [TextMessage.user('hi'), TextMessage.assistant('hello')],
+          history: const [
+            TextMessage.user('hi'),
+            TextMessage.assistant('hello'),
+          ],
           image: TextImage(bytes: Uint8List.fromList(const [1, 2, 3])),
         ),
       );
@@ -93,10 +102,19 @@ void main() {
           headers: const {'content-type': 'application/json'},
         );
       });
-      final generator = ClaudeTextClient(credentials: _creds, httpClient: client);
+      final generator = ClaudeTextClient(
+        credentials: _creds,
+        httpClient: client,
+      );
       expect(
         () => generator.generateText(const TextRequest(prompt: 'x')),
-        throwsA(isA<AiResponseException>().having((e) => e.provider, 'provider', 'claude')),
+        throwsA(
+          isA<AiResponseException>().having(
+            (e) => e.provider,
+            'provider',
+            'claude',
+          ),
+        ),
       );
     });
 
@@ -112,7 +130,10 @@ void main() {
           headers: const {'content-type': 'application/json'},
         );
       });
-      final generator = ClaudeTextClient(credentials: _creds, httpClient: client);
+      final generator = ClaudeTextClient(
+        credentials: _creds,
+        httpClient: client,
+      );
       expect(
         () => generator.generateText(const TextRequest(prompt: 'x')),
         throwsA(isA<AiResponseException>()),
@@ -130,7 +151,9 @@ void main() {
         httpClient: client,
         endpoint: Uri.parse('https://proxy.test/messages'),
       );
-      await generator.generateText(const TextRequest(prompt: 'x', model: 'claude-haiku'));
+      await generator.generateText(
+        const TextRequest(prompt: 'x', model: 'claude-haiku'),
+      );
       expect(seen.url.host, 'proxy.test');
       final body = jsonDecode(seen.body) as Map<String, Object?>;
       expect(body['model'], 'claude-haiku');
@@ -138,7 +161,11 @@ void main() {
 
     test('maps a 500 to AiTransientException after retries', () {
       final client = MockClient((_) async => http.Response('boom', 500));
-      final generator = ClaudeTextClient(credentials: _creds, httpClient: client, sleep: _noSleep);
+      final generator = ClaudeTextClient(
+        credentials: _creds,
+        httpClient: client,
+        sleep: _noSleep,
+      );
       expect(
         () => generator.generateText(const TextRequest(prompt: 'x')),
         throwsA(isA<AiTransientException>()),
@@ -147,7 +174,10 @@ void main() {
 
     test('maps a 401 to AiAuthException', () {
       final client = MockClient((_) async => http.Response('no', 401));
-      final generator = ClaudeTextClient(credentials: _creds, httpClient: client);
+      final generator = ClaudeTextClient(
+        credentials: _creds,
+        httpClient: client,
+      );
       expect(
         () => generator.generateText(const TextRequest(prompt: 'x')),
         throwsA(isA<AiAuthException>()),

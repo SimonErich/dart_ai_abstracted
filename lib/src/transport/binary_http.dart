@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:ai_abstracted/src/core/ai_exception.dart';
-import 'package:ai_abstracted/src/transport/http_errors.dart';
 import 'package:http/http.dart' as http;
+
+import '../core/ai_exception.dart';
+import 'http_errors.dart';
 
 /// The bytes of a binary response together with their MIME type.
 typedef BinaryResponse = ({Uint8List bytes, String mimeType});
@@ -19,7 +20,10 @@ Future<BinaryResponse> getBytes(
   required String provider,
   Map<String, String> headers = const {},
 }) async {
-  final response = await _send(provider, () => client.get(uri, headers: headers));
+  final response = await _send(
+    provider,
+    () => client.get(uri, headers: headers),
+  );
   return _readBytes(response, provider);
 }
 
@@ -46,14 +50,25 @@ Future<BinaryResponse> postForBytes(
   return _readBytes(response, provider);
 }
 
-/// Runs [request], rethrowing [AiException]s and wrapping anything else.
-Future<http.Response> _send(String provider, Future<http.Response> Function() request) async {
+/// Runs [request], rethrowing [AiException]s and wrapping any other exception.
+///
+/// Only [Exception]s are wrapped as transient. An [Error] (a programming bug
+/// such as a bad argument or a state violation) propagates with its stack
+/// trace, so it is never mistaken for a retryable transport failure.
+Future<http.Response> _send(
+  String provider,
+  Future<http.Response> Function() request,
+) async {
   try {
     return await request();
   } on AiException {
     rethrow;
-  } on Object catch (error) {
-    throw AiTransientException('Transport failure: $error', provider: provider, cause: error);
+  } on Exception catch (error) {
+    throw AiTransientException(
+      'Transport failure: $error',
+      provider: provider,
+      cause: error,
+    );
   }
 }
 

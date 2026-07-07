@@ -28,7 +28,10 @@ void main() {
         seen = request;
         return _ok('bonjour');
       });
-      final generator = MistralTextClient(credentials: _creds, httpClient: client);
+      final generator = MistralTextClient(
+        credentials: _creds,
+        httpClient: client,
+      );
       final stages = <GenerationStage>[];
       final result = await generator.generateText(
         const TextRequest(prompt: 'hi'),
@@ -50,33 +53,39 @@ void main() {
       expect((messages.single as Map)['content'], 'hi');
     });
 
-    test('prepends system, includes history and json mode and temperature', () async {
-      late http.Request seen;
-      final client = MockClient((request) async {
-        seen = request;
-        return _ok('{}');
-      });
-      final generator = MistralTextClient(credentials: _creds, httpClient: client);
-      await generator.generateText(
-        const TextRequest(
-          prompt: 'and now?',
-          system: 'be terse',
-          history: [TextMessage.user('hi'), TextMessage.assistant('hello')],
-          temperature: 0.3,
-          jsonSchema: {'type': 'object'},
-        ),
-      );
-      final body = jsonDecode(seen.body) as Map<String, Object?>;
-      expect(body['temperature'], 0.3);
-      expect((body['response_format']! as Map)['type'], 'json_object');
-      final messages = body['messages']! as List;
-      expect(messages, hasLength(4));
-      expect((messages[0] as Map)['role'], 'system');
-      expect((messages[0] as Map)['content'], 'be terse');
-      expect((messages[1] as Map)['role'], 'user');
-      expect((messages[2] as Map)['role'], 'assistant');
-      expect((messages[3] as Map)['content'], 'and now?');
-    });
+    test(
+      'prepends system, includes history and json mode and temperature',
+      () async {
+        late http.Request seen;
+        final client = MockClient((request) async {
+          seen = request;
+          return _ok('{}');
+        });
+        final generator = MistralTextClient(
+          credentials: _creds,
+          httpClient: client,
+        );
+        await generator.generateText(
+          const TextRequest(
+            prompt: 'and now?',
+            system: 'be terse',
+            history: [TextMessage.user('hi'), TextMessage.assistant('hello')],
+            temperature: 0.3,
+            jsonSchema: {'type': 'object'},
+          ),
+        );
+        final body = jsonDecode(seen.body) as Map<String, Object?>;
+        expect(body['temperature'], 0.3);
+        expect((body['response_format']! as Map)['type'], 'json_object');
+        final messages = body['messages']! as List;
+        expect(messages, hasLength(4));
+        expect((messages[0] as Map)['role'], 'system');
+        expect((messages[0] as Map)['content'], 'be terse');
+        expect((messages[1] as Map)['role'], 'user');
+        expect((messages[2] as Map)['role'], 'assistant');
+        expect((messages[3] as Map)['content'], 'and now?');
+      },
+    );
 
     test('throws AiResponseException when no content is present', () {
       final client = MockClient((_) async {
@@ -86,7 +95,10 @@ void main() {
           headers: const {'content-type': 'application/json'},
         );
       });
-      final generator = MistralTextClient(credentials: _creds, httpClient: client);
+      final generator = MistralTextClient(
+        credentials: _creds,
+        httpClient: client,
+      );
       expect(
         () => generator.generateText(const TextRequest(prompt: 'x')),
         throwsA(isA<AiResponseException>()),
@@ -110,7 +122,11 @@ void main() {
 
     test('maps a 500 to AiTransientException after retries', () {
       final client = MockClient((_) async => http.Response('boom', 500));
-      final generator = MistralTextClient(credentials: _creds, httpClient: client, sleep: _noSleep);
+      final generator = MistralTextClient(
+        credentials: _creds,
+        httpClient: client,
+        sleep: _noSleep,
+      );
       expect(
         () => generator.generateText(const TextRequest(prompt: 'x')),
         throwsA(isA<AiTransientException>()),
@@ -119,7 +135,10 @@ void main() {
 
     test('maps a 401 to AiAuthException', () {
       final client = MockClient((_) async => http.Response('no', 401));
-      final generator = MistralTextClient(credentials: _creds, httpClient: client);
+      final generator = MistralTextClient(
+        credentials: _creds,
+        httpClient: client,
+      );
       expect(
         () => generator.generateText(const TextRequest(prompt: 'x')),
         throwsA(isA<AiAuthException>()),

@@ -1,17 +1,18 @@
-import 'package:ai_abstracted/src/config/provider_credentials.dart';
-import 'package:ai_abstracted/src/contracts/image_generator.dart';
-import 'package:ai_abstracted/src/core/ai_exception.dart';
-import 'package:ai_abstracted/src/core/generation_metadata.dart';
-import 'package:ai_abstracted/src/core/generation_progress.dart';
-import 'package:ai_abstracted/src/core/generation_result.dart';
-import 'package:ai_abstracted/src/core/media_kind.dart';
-import 'package:ai_abstracted/src/core/requests/image_request.dart';
-import 'package:ai_abstracted/src/transport/binary_http.dart';
-import 'package:ai_abstracted/src/transport/json_http.dart';
-import 'package:ai_abstracted/src/transport/poller.dart';
-import 'package:ai_abstracted/src/transport/retry_policy.dart';
-import 'package:ai_abstracted/src/transport/retrying_http.dart';
 import 'package:http/http.dart' as http;
+
+import '../../config/provider_credentials.dart';
+import '../../contracts/image_generator.dart';
+import '../../core/ai_exception.dart';
+import '../../core/generation_metadata.dart';
+import '../../core/generation_progress.dart';
+import '../../core/generation_result.dart';
+import '../../core/media_kind.dart';
+import '../../core/requests/image_request.dart';
+import '../../transport/binary_http.dart';
+import '../../transport/json_http.dart';
+import '../../transport/poller.dart';
+import '../../transport/retry_policy.dart';
+import '../../transport/retrying_http.dart';
 
 /// The default Black Forest Labs FLUX model.
 const _defaultModel = 'flux-pro-1.1';
@@ -72,7 +73,10 @@ final class FluxImageClient implements ImageGenerator {
     );
     final pollingUrl = submit['polling_url'];
     if (pollingUrl is! String) {
-      throw AiResponseException('FLUX did not return a polling_url', provider: _provider);
+      throw AiResponseException(
+        'FLUX did not return a polling_url',
+        provider: _provider,
+      );
     }
 
     final ready = await pollUntil<Map<String, Object?>>(
@@ -84,7 +88,9 @@ final class FluxImageClient implements ImageGenerator {
       provider: _provider,
     );
 
-    onProgress?.call(const GenerationProgress(stage: GenerationStage.downloading));
+    onProgress?.call(
+      const GenerationProgress(stage: GenerationStage.downloading),
+    );
     final bytes = await _downloadSample(ready);
     onProgress?.call(const GenerationProgress(stage: GenerationStage.done));
     return GenerationResult(
@@ -119,7 +125,12 @@ final class FluxImageClient implements ImageGenerator {
   Future<Map<String, Object?>?> _pollResult(String pollingUrl) async {
     final json = await withRetry(
       retryPolicy,
-      () => getJson(_http, Uri.parse(pollingUrl), headers: _headers, provider: _provider),
+      () => getJson(
+        _http,
+        Uri.parse(pollingUrl),
+        headers: _headers,
+        provider: _provider,
+      ),
       sleep: sleep,
     );
     final status = json['status'];
@@ -131,9 +142,12 @@ final class FluxImageClient implements ImageGenerator {
     final result = ready['result'];
     final sample = result is Map<String, Object?> ? result['sample'] : null;
     if (sample is! String) {
-      throw AiResponseException('FLUX result carried no sample url', provider: _provider);
+      throw AiResponseException(
+        'FLUX result carried no sample url',
+        provider: _provider,
+      );
     }
-    return withRetry(
+    return await withRetry(
       retryPolicy,
       () => getBytes(_http, Uri.parse(sample), provider: _provider),
       sleep: sleep,

@@ -60,17 +60,31 @@ class _Text implements TextGenerator {
 
 void main() {
   test('each contract is implementable and returns its kind', () async {
-    expect((await _Image().generateImage(const ImageRequest(prompt: 'x'))).kind, MediaKind.image);
-    expect((await _Video().generateVideo(const VideoRequest(prompt: 'x'))).kind, MediaKind.video);
+    expect(
+      (await _Image().generateImage(const ImageRequest(prompt: 'x'))).kind,
+      MediaKind.image,
+    );
+    expect(
+      (await _Video().generateVideo(const VideoRequest(prompt: 'x'))).kind,
+      MediaKind.video,
+    );
     expect(
       (await _Speech().generateSpeech(const SpeechRequest(prompt: 'x'))).kind,
       MediaKind.speech,
     );
     expect(
-      (await _Sound().generateSoundEffect(const SoundEffectRequest(prompt: 'x'))).kind,
+      (await _Sound().generateSoundEffect(
+        const SoundEffectRequest(prompt: 'x'),
+      )).kind,
       MediaKind.soundEffect,
     );
-    expect((await _Music().generateMusic(const MusicRequest(prompt: 'x'))).kind, MediaKind.music);
-    expect((await _Text().generateText(const TextRequest(prompt: 'x'))).kind, MediaKind.text);
+    expect(
+      (await _Music().generateMusic(const MusicRequest(prompt: 'x'))).kind,
+      MediaKind.music,
+    );
+    expect(
+      (await _Text().generateText(const TextRequest(prompt: 'x'))).kind,
+      MediaKind.text,
+    );
   });
 }

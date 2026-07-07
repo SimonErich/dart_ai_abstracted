@@ -1,19 +1,20 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:ai_abstracted/src/config/provider_credentials.dart';
-import 'package:ai_abstracted/src/contracts/text_generator.dart';
-import 'package:ai_abstracted/src/core/ai_exception.dart';
-import 'package:ai_abstracted/src/core/generation_metadata.dart';
-import 'package:ai_abstracted/src/core/generation_progress.dart';
-import 'package:ai_abstracted/src/core/generation_result.dart';
-import 'package:ai_abstracted/src/core/media_kind.dart';
-import 'package:ai_abstracted/src/core/requests/text_request.dart';
-import 'package:ai_abstracted/src/core/text_message.dart';
-import 'package:ai_abstracted/src/transport/json_http.dart';
-import 'package:ai_abstracted/src/transport/retry_policy.dart';
-import 'package:ai_abstracted/src/transport/retrying_http.dart';
 import 'package:http/http.dart' as http;
+
+import '../../config/provider_credentials.dart';
+import '../../contracts/text_generator.dart';
+import '../../core/ai_exception.dart';
+import '../../core/generation_metadata.dart';
+import '../../core/generation_progress.dart';
+import '../../core/generation_result.dart';
+import '../../core/media_kind.dart';
+import '../../core/requests/text_request.dart';
+import '../../core/text_message.dart';
+import '../../transport/json_http.dart';
+import '../../transport/retry_policy.dart';
+import '../../transport/retrying_http.dart';
 
 /// The default Mistral text model.
 const _defaultModel = 'mistral-large-latest';
@@ -65,7 +66,10 @@ final class MistralTextClient implements TextGenerator {
     );
     final text = _firstContent(json);
     if (text == null) {
-      throw AiResponseException('Mistral returned no message content', provider: _provider);
+      throw AiResponseException(
+        'Mistral returned no message content',
+        provider: _provider,
+      );
     }
     onProgress?.call(const GenerationProgress(stage: GenerationStage.done));
     return GenerationResult(
@@ -85,14 +89,19 @@ final class MistralTextClient implements TextGenerator {
     'messages': [
       if (request.system != null) {'role': 'system', 'content': request.system},
       for (final turn in request.history)
-        {'role': turn.role == TextRole.assistant ? 'assistant' : 'user', 'content': turn.text},
+        {
+          'role': turn.role == TextRole.assistant ? 'assistant' : 'user',
+          'content': turn.text,
+        },
       {'role': 'user', 'content': request.prompt},
     ],
   };
 
   String? _firstContent(Map<String, Object?> json) {
     final choices = json['choices'];
-    if (choices is! List || choices.isEmpty || choices.first is! Map<String, Object?>) {
+    if (choices is! List ||
+        choices.isEmpty ||
+        choices.first is! Map<String, Object?>) {
       return null;
     }
     final message = (choices.first as Map<String, Object?>)['message'];

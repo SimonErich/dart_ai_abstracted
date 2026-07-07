@@ -1,6 +1,7 @@
-import 'package:ai_abstracted/src/core/generation_request.dart';
-import 'package:ai_abstracted/src/core/media_kind.dart';
 import 'package:meta/meta.dart';
+
+import '../generation_request.dart';
+import '../media_kind.dart';
 
 /// A request to generate a video clip.
 @immutable

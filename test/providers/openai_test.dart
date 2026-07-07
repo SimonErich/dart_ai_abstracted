@@ -26,7 +26,10 @@ void main() {
           headers: const {'content-type': 'application/json'},
         );
       });
-      final generator = OpenAiImageClient(credentials: _creds, httpClient: client);
+      final generator = OpenAiImageClient(
+        credentials: _creds,
+        httpClient: client,
+      );
       final stages = <GenerationStage>[];
       final result = await generator.generateImage(
         const ImageRequest(prompt: 'a dog'),
@@ -53,10 +56,20 @@ void main() {
             headers: const {'content-type': 'application/json'},
           );
         }
-        return http.Response.bytes(png, 200, headers: const {'content-type': 'image/png'});
+        return http.Response.bytes(
+          png,
+          200,
+          headers: const {'content-type': 'image/png'},
+        );
       });
-      final generator = OpenAiImageClient(credentials: _creds, httpClient: client, sleep: _noSleep);
-      final result = await generator.generateImage(const ImageRequest(prompt: 'x'));
+      final generator = OpenAiImageClient(
+        credentials: _creds,
+        httpClient: client,
+        sleep: _noSleep,
+      );
+      final result = await generator.generateImage(
+        const ImageRequest(prompt: 'x'),
+      );
       expect(result.bytes, png);
       expect(result.mimeType, 'image/png');
     });
@@ -69,7 +82,10 @@ void main() {
           headers: const {'content-type': 'application/json'},
         );
       });
-      final generator = OpenAiImageClient(credentials: _creds, httpClient: client);
+      final generator = OpenAiImageClient(
+        credentials: _creds,
+        httpClient: client,
+      );
       expect(
         () => generator.generateImage(const ImageRequest(prompt: 'x')),
         throwsA(isA<AiResponseException>()),
@@ -78,7 +94,11 @@ void main() {
 
     test('maps a 429 to AiRateLimitException', () {
       final client = MockClient((_) async => http.Response('slow', 429));
-      final generator = OpenAiImageClient(credentials: _creds, httpClient: client, sleep: _noSleep);
+      final generator = OpenAiImageClient(
+        credentials: _creds,
+        httpClient: client,
+        sleep: _noSleep,
+      );
       expect(
         () => generator.generateImage(const ImageRequest(prompt: 'x')),
         throwsA(isA<AiRateLimitException>()),
@@ -102,8 +122,13 @@ void main() {
         );
       });
       const creds = ProviderCredentials(apiKey: 'sk', organization: 'org-1');
-      final generator = OpenAiImageClient(credentials: creds, httpClient: client);
-      await generator.generateImage(const ImageRequest(prompt: 'x', width: 1024, height: 1024));
+      final generator = OpenAiImageClient(
+        credentials: creds,
+        httpClient: client,
+      );
+      await generator.generateImage(
+        const ImageRequest(prompt: 'x', width: 1024, height: 1024),
+      );
       final body = jsonDecode(seen.body) as Map<String, Object?>;
       expect(body['size'], '1024x1024');
       expect(seen.headers['openai-organization'], 'org-1');
@@ -121,7 +146,10 @@ void main() {
           headers: const {'content-type': 'application/json'},
         );
       });
-      final generator = OpenAiImageClient(credentials: _creds, httpClient: client);
+      final generator = OpenAiImageClient(
+        credentials: _creds,
+        httpClient: client,
+      );
       expect(
         () => generator.generateImage(const ImageRequest(prompt: 'x')),
         throwsA(isA<AiResponseException>()),

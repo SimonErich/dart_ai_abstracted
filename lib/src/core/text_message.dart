@@ -30,7 +30,8 @@ final class TextMessage {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is TextMessage && other.role == role && other.text == text;
+      identical(this, other) ||
+      other is TextMessage && other.role == role && other.text == text;
 
   @override
   int get hashCode => Object.hash(role, text);

@@ -43,8 +43,12 @@ void main(List<String> args) {
   final percent = 100 * covered / total;
   final rounded = percent.toStringAsFixed(2);
   if (percent + 1e-9 < min) {
-    stderr.writeln('coverage $rounded% ($covered/$total) is below the $min% minimum');
+    stderr.writeln(
+      'coverage $rounded% ($covered/$total) is below the $min% minimum',
+    );
     exit(1);
   }
-  stdout.writeln('coverage $rounded% ($covered/$total) meets the $min% minimum');
+  stdout.writeln(
+    'coverage $rounded% ($covered/$total) meets the $min% minimum',
+  );
 }

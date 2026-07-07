@@ -51,7 +51,7 @@ void main() {
     test('rethrows after exhausting maxAttempts', () async {
       var calls = 0;
       await expectLater(
-        withRetry(policy, () async {
+        withRetry<void>(policy, () {
           calls++;
           throw AiTransientException('always', provider: 'p');
         }, sleep: recordSleep),
@@ -64,7 +64,7 @@ void main() {
     test('does not retry a non-retryable AiException', () async {
       var calls = 0;
       await expectLater(
-        withRetry(policy, () async {
+        withRetry<void>(policy, () {
           calls++;
           throw AiAuthException('no', provider: 'p');
         }, sleep: recordSleep),
@@ -77,9 +77,9 @@ void main() {
     test('honors a custom retryWhen predicate', () async {
       var calls = 0;
       await expectLater(
-        withRetry(
+        withRetry<void>(
           policy,
-          () async {
+          () {
             calls++;
             throw AiTransientException('x', provider: 'p');
           },

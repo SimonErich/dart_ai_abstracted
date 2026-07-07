@@ -26,8 +26,14 @@ void main() {
     });
 
     test('value equality and hashCode', () {
-      const a = GenerationProgress(stage: GenerationStage.queued, fraction: 0.1);
-      const b = GenerationProgress(stage: GenerationStage.queued, fraction: 0.1);
+      const a = GenerationProgress(
+        stage: GenerationStage.queued,
+        fraction: 0.1,
+      );
+      const b = GenerationProgress(
+        stage: GenerationStage.queued,
+        fraction: 0.1,
+      );
       const c = GenerationProgress(stage: GenerationStage.done);
       expect(a, b);
       expect(a.hashCode, b.hashCode);

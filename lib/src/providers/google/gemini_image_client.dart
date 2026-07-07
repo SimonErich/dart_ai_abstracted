@@ -1,19 +1,20 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:ai_abstracted/src/config/provider_credentials.dart';
-import 'package:ai_abstracted/src/contracts/image_generator.dart';
-import 'package:ai_abstracted/src/core/ai_exception.dart';
-import 'package:ai_abstracted/src/core/generation_metadata.dart';
-import 'package:ai_abstracted/src/core/generation_progress.dart';
-import 'package:ai_abstracted/src/core/generation_result.dart';
-import 'package:ai_abstracted/src/core/media_kind.dart';
-import 'package:ai_abstracted/src/core/requests/image_request.dart';
-import 'package:ai_abstracted/src/providers/google/gemini_parts.dart';
-import 'package:ai_abstracted/src/transport/json_http.dart';
-import 'package:ai_abstracted/src/transport/retry_policy.dart';
-import 'package:ai_abstracted/src/transport/retrying_http.dart';
 import 'package:http/http.dart' as http;
+
+import '../../config/provider_credentials.dart';
+import '../../contracts/image_generator.dart';
+import '../../core/ai_exception.dart';
+import '../../core/generation_metadata.dart';
+import '../../core/generation_progress.dart';
+import '../../core/generation_result.dart';
+import '../../core/media_kind.dart';
+import '../../core/requests/image_request.dart';
+import '../../transport/json_http.dart';
+import '../../transport/retry_policy.dart';
+import '../../transport/retrying_http.dart';
+import 'gemini_parts.dart';
 
 /// The default Gemini image model ("Nano Banana").
 const _defaultModel = 'gemini-2.5-flash-image';
@@ -74,14 +75,21 @@ final class GeminiImageClient implements ImageGenerator {
     );
     final inline = firstInlineData(json);
     if (inline == null) {
-      throw AiResponseException('Gemini returned no inline image data', provider: _provider);
+      throw AiResponseException(
+        'Gemini returned no inline image data',
+        provider: _provider,
+      );
     }
     onProgress?.call(const GenerationProgress(stage: GenerationStage.done));
     return GenerationResult(
       bytes: Uint8List.fromList(base64Decode(inline.data)),
       mimeType: inline.mimeType,
       kind: MediaKind.image,
-      metadata: GenerationMetadata(model: model, width: request.width, height: request.height),
+      metadata: GenerationMetadata(
+        model: model,
+        width: request.width,
+        height: request.height,
+      ),
       seedUsed: request.seed,
     );
   }
@@ -89,7 +97,11 @@ final class GeminiImageClient implements ImageGenerator {
   Uri _uri(String model) {
     final base =
         endpoint ??
-        Uri.parse('https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent');
-    return base.replace(queryParameters: {...base.queryParameters, 'key': credentials.apiKey});
+        Uri.parse(
+          'https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent',
+        );
+    return base.replace(
+      queryParameters: {...base.queryParameters, 'key': credentials.apiKey},
+    );
   }
 }

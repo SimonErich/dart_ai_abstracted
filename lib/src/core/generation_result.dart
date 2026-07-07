@@ -1,15 +1,16 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:ai_abstracted/src/core/generation_metadata.dart';
-import 'package:ai_abstracted/src/core/media_kind.dart';
 import 'package:meta/meta.dart';
+
+import 'generation_metadata.dart';
+import 'media_kind.dart';
 
 /// The normalized output of any generation: bytes plus describing metadata.
 ///
 /// The package never writes files; callers persist or cache [bytes] themselves.
 @immutable
-class GenerationResult {
+final class GenerationResult {
   /// Creates a [GenerationResult].
   const GenerationResult({
     required this.bytes,

@@ -17,7 +17,7 @@ enum GenerationStage {
 
 /// A progress update emitted while a generation job runs.
 @immutable
-class GenerationProgress {
+final class GenerationProgress {
   /// Creates a [GenerationProgress] in [stage].
   ///
   /// [fraction] is an optional 0..1 completion estimate; [message] is an

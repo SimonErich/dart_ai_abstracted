@@ -1,14 +1,15 @@
-import 'package:ai_abstracted/src/config/provider_credentials.dart';
-import 'package:ai_abstracted/src/contracts/speech_generator.dart';
-import 'package:ai_abstracted/src/core/generation_metadata.dart';
-import 'package:ai_abstracted/src/core/generation_progress.dart';
-import 'package:ai_abstracted/src/core/generation_result.dart';
-import 'package:ai_abstracted/src/core/media_kind.dart';
-import 'package:ai_abstracted/src/core/requests/speech_request.dart';
-import 'package:ai_abstracted/src/transport/binary_http.dart';
-import 'package:ai_abstracted/src/transport/retry_policy.dart';
-import 'package:ai_abstracted/src/transport/retrying_http.dart';
 import 'package:http/http.dart' as http;
+
+import '../../config/provider_credentials.dart';
+import '../../contracts/speech_generator.dart';
+import '../../core/generation_metadata.dart';
+import '../../core/generation_progress.dart';
+import '../../core/generation_result.dart';
+import '../../core/media_kind.dart';
+import '../../core/requests/speech_request.dart';
+import '../../transport/binary_http.dart';
+import '../../transport/retry_policy.dart';
+import '../../transport/retrying_http.dart';
 
 /// The ElevenLabs default voice id ("Rachel").
 const _defaultVoice = '21m00Tcm4TlvDq8ikWAM';
@@ -87,7 +88,11 @@ final class ElevenLabsSpeechClient implements SpeechGenerator {
     };
   }
 
-  Uri _uri(String voice) => endpoint == null
-      ? Uri.parse('https://api.elevenlabs.io/v1/text-to-speech/$voice')
-      : endpoint!.replace(pathSegments: [...endpoint!.pathSegments, voice]);
+  Uri _uri(String voice) {
+    final endpoint = this.endpoint;
+    if (endpoint == null) {
+      return Uri.parse('https://api.elevenlabs.io/v1/text-to-speech/$voice');
+    }
+    return endpoint.replace(pathSegments: [...endpoint.pathSegments, voice]);
+  }
 }

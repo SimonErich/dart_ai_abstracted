@@ -1,14 +1,14 @@
 import 'dart:typed_data';
 
-import 'package:ai_abstracted/src/contracts/video_generator.dart';
-import 'package:ai_abstracted/src/core/generation_metadata.dart';
-import 'package:ai_abstracted/src/core/generation_progress.dart';
-import 'package:ai_abstracted/src/core/generation_result.dart';
-import 'package:ai_abstracted/src/core/media_kind.dart';
-import 'package:ai_abstracted/src/core/requests/video_request.dart';
+import '../contracts/video_generator.dart';
+import '../core/generation_metadata.dart';
+import '../core/generation_progress.dart';
+import '../core/generation_result.dart';
+import '../core/media_kind.dart';
+import '../core/requests/video_request.dart';
 
 /// An in-memory [VideoGenerator] for tests: no network, deterministic bytes.
-final class FakeVideoGenerator implements VideoGenerator {
+class FakeVideoGenerator implements VideoGenerator {
   /// Creates a [FakeVideoGenerator].
   ///
   /// [bytes] are returned verbatim (a tiny deterministic default otherwise),
@@ -17,8 +17,13 @@ final class FakeVideoGenerator implements VideoGenerator {
   FakeVideoGenerator({
     Uint8List? bytes,
     this.mimeType = 'video/mp4',
-    this.metadata = const GenerationMetadata(model: 'fake-video', hasAudio: true),
-  }) : bytes = bytes ?? Uint8List.fromList(const [0, 0, 0, 0x18, 0x66, 0x74, 0x79, 0x70]);
+    this.metadata = const GenerationMetadata(
+      model: 'fake-video',
+      hasAudio: true,
+    ),
+  }) : bytes =
+           bytes ??
+           Uint8List.fromList(const [0, 0, 0, 0x18, 0x66, 0x74, 0x79, 0x70]);
 
   /// The video bytes every call returns.
   final Uint8List bytes;

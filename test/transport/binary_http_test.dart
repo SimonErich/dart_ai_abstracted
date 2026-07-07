@@ -14,7 +14,11 @@ void main() {
   group('getBytes', () {
     test('returns the bytes and mime type on 200', () async {
       final client = MockClient((_) async {
-        return http.Response.bytes(payload, 200, headers: const {'content-type': 'audio/mpeg'});
+        return http.Response.bytes(
+          payload,
+          200,
+          headers: const {'content-type': 'audio/mpeg'},
+        );
       });
       final result = await getBytes(client, uri, provider: 'p');
       expect(result.bytes, payload);
@@ -23,7 +27,11 @@ void main() {
 
     test('strips parameters from the content-type', () async {
       final client = MockClient((_) async {
-        return http.Response.bytes(payload, 200, headers: const {'content-type': 'image/png; q=1'});
+        return http.Response.bytes(
+          payload,
+          200,
+          headers: const {'content-type': 'image/png; q=1'},
+        );
       });
       final result = await getBytes(client, uri, provider: 'p');
       expect(result.mimeType, 'image/png');
@@ -37,12 +45,18 @@ void main() {
 
     test('maps non-2xx via the shared mapper', () {
       final client = MockClient((_) async => http.Response('nope', 401));
-      expect(() => getBytes(client, uri, provider: 'p'), throwsA(isA<AiAuthException>()));
+      expect(
+        () => getBytes(client, uri, provider: 'p'),
+        throwsA(isA<AiAuthException>()),
+      );
     });
 
     test('wraps a transport throw as AiTransientException', () {
       final client = MockClient((_) async => throw Exception('down'));
-      expect(() => getBytes(client, uri, provider: 'p'), throwsA(isA<AiTransientException>()));
+      expect(
+        () => getBytes(client, uri, provider: 'p'),
+        throwsA(isA<AiTransientException>()),
+      );
     });
 
     test('rethrows an AiException from the client unchanged', () {
@@ -55,7 +69,13 @@ void main() {
       final client = MockClient((_) async => http.Response('', 503));
       expect(
         () => getBytes(client, uri, provider: 'p'),
-        throwsA(isA<AiTransientException>().having((e) => e.message, 'message', contains('503'))),
+        throwsA(
+          isA<AiTransientException>().having(
+            (e) => e.message,
+            'message',
+            contains('503'),
+          ),
+        ),
       );
     });
   });
@@ -65,7 +85,11 @@ void main() {
       late http.Request seen;
       final client = MockClient((request) async {
         seen = request;
-        return http.Response.bytes(payload, 200, headers: const {'content-type': 'audio/mpeg'});
+        return http.Response.bytes(
+          payload,
+          200,
+          headers: const {'content-type': 'audio/mpeg'},
+        );
       });
       final result = await postForBytes(
         client,
@@ -83,7 +107,13 @@ void main() {
     test('maps non-2xx via the shared mapper', () {
       final client = MockClient((_) async => http.Response('bad', 422));
       expect(
-        () => postForBytes(client, uri, headers: const {}, body: const {}, provider: 'p'),
+        () => postForBytes(
+          client,
+          uri,
+          headers: const {},
+          body: const {},
+          provider: 'p',
+        ),
         throwsA(isA<AiInvalidRequestException>()),
       );
     });

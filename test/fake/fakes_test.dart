@@ -8,17 +8,27 @@ List<GenerationStage> _stages() => <GenerationStage>[];
 
 void main() {
   group('FakeImageGenerator', () {
-    test('returns image bytes, records the request, and emits lifecycle', () async {
-      final stages = _stages();
-      final fake = FakeImageGenerator();
-      const request = ImageRequest(prompt: 'a cat');
-      final result = await fake.generateImage(request, onProgress: (p) => stages.add(p.stage));
-      expect(result.kind, MediaKind.image);
-      expect(result.bytes, isNotEmpty);
-      expect(result.mimeType, 'image/png');
-      expect(fake.lastRequest, same(request));
-      expect(stages, [GenerationStage.queued, GenerationStage.running, GenerationStage.done]);
-    });
+    test(
+      'returns image bytes, records the request, and emits lifecycle',
+      () async {
+        final stages = _stages();
+        final fake = FakeImageGenerator();
+        const request = ImageRequest(prompt: 'a cat');
+        final result = await fake.generateImage(
+          request,
+          onProgress: (p) => stages.add(p.stage),
+        );
+        expect(result.kind, MediaKind.image);
+        expect(result.bytes, isNotEmpty);
+        expect(result.mimeType, 'image/png');
+        expect(fake.lastRequest, same(request));
+        expect(stages, [
+          GenerationStage.queued,
+          GenerationStage.running,
+          GenerationStage.done,
+        ]);
+      },
+    );
 
     test('honors custom fixture bytes and metadata', () async {
       final bytes = Uint8List.fromList([9, 8, 7]);
@@ -42,7 +52,11 @@ void main() {
     expect(result.mimeType, 'video/mp4');
     expect(result.metadata.hasAudio, isTrue);
     expect(fake.lastRequest, isNotNull);
-    expect(stages, [GenerationStage.queued, GenerationStage.running, GenerationStage.done]);
+    expect(stages, [
+      GenerationStage.queued,
+      GenerationStage.running,
+      GenerationStage.done,
+    ]);
   });
 
   test('FakeSpeechGenerator returns audio bytes', () async {

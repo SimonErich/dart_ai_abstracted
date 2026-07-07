@@ -1,12 +1,31 @@
 /// Provider-agnostic generative AI: one set of contracts for text, image,
 /// video, speech, sound-effect, and music generation across many providers.
 ///
+/// You pick a capability ([TextGenerator], [ImageGenerator], and the other
+/// four), hand it a typed request plus [ProviderCredentials], and get back a
+/// [GenerationResult]: the bytes, the MIME type, the media kind, and metadata.
+/// Failures arrive as the typed [AiException] hierarchy. [ProviderRegistry]
+/// resolves a [ProviderId] to a concrete client when you choose the provider at
+/// runtime, and every capability has an in-memory fake (such as
+/// [FakeTextGenerator]) so downstream code stays testable without a network.
+///
+/// It is pure Dart: no Flutter, no `dart:io`, and it never writes files. You
+/// decide where the result bytes go.
+///
 /// Import this barrel and nothing else:
 ///
 /// ```dart
 /// import 'package:ai_abstracted/ai_abstracted.dart';
 /// ```
 library;
+
+import 'src/config/provider_credentials.dart';
+import 'src/contracts/image_generator.dart';
+import 'src/contracts/text_generator.dart';
+import 'src/core/ai_exception.dart';
+import 'src/fake/fake_text_generator.dart';
+import 'src/registry/provider_id.dart';
+import 'src/registry/provider_registry.dart';
 
 export 'src/config/credentials_from_env.dart';
 export 'src/config/provider_credentials.dart';

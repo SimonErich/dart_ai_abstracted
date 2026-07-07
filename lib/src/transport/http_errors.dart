@@ -1,4 +1,4 @@
-import 'package:ai_abstracted/src/core/ai_exception.dart';
+import '../core/ai_exception.dart';
 
 /// Maps a non-2xx HTTP [status] to the matching [AiException] subtype.
 ///
@@ -17,7 +17,12 @@ AiException mapStatusToException(
   switch (status) {
     case 401:
     case 403:
-      return AiAuthException(message, provider: provider, statusCode: status, cause: cause);
+      return AiAuthException(
+        message,
+        provider: provider,
+        statusCode: status,
+        cause: cause,
+      );
     case 429:
       return AiRateLimitException(
         message,
@@ -36,9 +41,19 @@ AiException mapStatusToException(
       );
     default:
       if (status >= 500 && status < 600) {
-        return AiTransientException(message, provider: provider, statusCode: status, cause: cause);
+        return AiTransientException(
+          message,
+          provider: provider,
+          statusCode: status,
+          cause: cause,
+        );
       }
-      return AiException(message, provider: provider, statusCode: status, cause: cause);
+      return AiException(
+        message,
+        provider: provider,
+        statusCode: status,
+        cause: cause,
+      );
   }
 }
 
