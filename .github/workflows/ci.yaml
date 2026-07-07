@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  analyze-and-test:
+  analyze:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,11 +16,50 @@ jobs:
           sdk: stable
       - run: dart pub get
       - name: Formatting
-        run: dart format --set-exit-if-changed .
+        run: dart format --output=none --set-exit-if-changed .
       - name: Analyze
         run: dart analyze --fatal-infos --fatal-warnings
-      - name: Test
-        run: dart test
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # '3.12.0' is the exact pubspec lower bound (three components, so it
+        # installs that patch rather than the latest 3.12.x). Update it in the
+        # same change as any pubspec bound bump.
+        sdk: ['3.12.0', stable, beta]
+    continue-on-error: ${{ matrix.sdk == 'beta' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ matrix.sdk }}
+      - run: dart pub get
+      - run: dart test
+
+  test-web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - run: dart pub get
+      # lib/ claims web support, so exercise the suite in a browser. The
+      # dart:io integration file is fenced with @TestOn('vm') and does not load.
+      - run: dart test -p chrome
+
+  test-downgrade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      # Prove the declared dependency lower bounds actually resolve and pass.
+      - run: dart pub downgrade
+      - run: dart test
 
   coverage:
     runs-on: ubuntu-latest
@@ -35,6 +74,30 @@ jobs:
           dart pub global activate coverage
           dart test --coverage=coverage
           dart pub global run coverage:format_coverage \
-            --lcov --in=coverage --out=coverage/lcov.info --report-on=lib
+            --check-ignore --lcov --in=coverage --out=coverage/lcov.info \
+            --report-on=lib
       - name: Enforce threshold
         run: dart run tool/check_coverage.dart --min 95 coverage/lcov.info
+
+  pana:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - run: dart pub get
+      # Require the maximum current pana score, whatever it is (no hard-coded
+      # total): fail if any points are lost.
+      - run: dart pub global activate pana
+      - run: dart pub global run pana --exit-code-threshold 0 --no-warning
+
+  publish-dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - run: dart pub get
+      - run: dart pub publish --dry-run
